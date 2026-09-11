@@ -1,0 +1,41 @@
+# Paulas Suchprofil. Kopieren nach config/profile.yaml und MIT PAULA ausfüllen (M2).
+# Fakten über sie (Lebenslauf) stehen NICHT hier, sondern in data/facts.md.
+
+display_name: "Paula Muster"       # Absendername in Mails
+email: "paula@example.com"
+
+target_roles:                      # Jobtitel, wie Portale sie nennen; auch Synonyme
+  - "Projektassistenz"
+  - "Assistentin Bauleitung"
+  - "Sachbearbeiterin Administration"
+search_terms:                      # was an Portale/APIs geschickt wird (pro Quelle ggf. anpassen)
+  adzuna: ["Projektassistenz", "Assistentin", "Sachbearbeiterin"]
+  mailalert: []                    # Suchagenten werden im Portal selbst konfiguriert
+
+locations:
+  home: "Winterthur"
+  radius_km: 40
+  acceptable_cities: ["Zürich", "Frauenfeld", "Wil"]   # explizit zusätzlich
+  remote_ok: false
+
+workload:
+  min_percent: 60
+  max_percent: 100
+
+employment_types: [permanent]      # permanent | temporary | internship
+languages_ok_for_postings: [de]    # Sprachen, in denen Inserate berücksichtigt werden (Q13)
+
+target_industries:                 # Keyword-Liste für Firmen-Priorisierung
+  - Bau
+  - Architektur
+  - Immobilien
+exclude_keywords:                  # Inserat enthält eines davon → Vorfilter raus
+  - "Führerausweis Kat. C"
+  - "Nachtschicht"
+  - "Provisionsbasis"
+exclude_companies: []              # zusätzlich zur Sperrliste in der DB
+watch_companies: []                # Karriereseiten, die täglich geprüft werden (M7)
+
+preferences_note: >
+  Freitext von Paula: was ihr wichtig ist, was sie nicht mehr will.
+  Wird T5 und T7 als Kontext mitgegeben.

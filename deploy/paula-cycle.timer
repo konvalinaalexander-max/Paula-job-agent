@@ -1,0 +1,12 @@
+[Unit]
+Description=Paula Job Agent – 3x täglich
+
+[Timer]
+OnCalendar=Mon..Sat 07:30
+OnCalendar=Mon..Sat 12:30
+OnCalendar=Mon..Sat 17:00
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

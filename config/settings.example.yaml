@@ -1,0 +1,94 @@
+# Kopieren nach config/settings.yaml. Enthält keine Secrets (die stehen in .env).
+# Jeder Wert hier hat eine Begründung in docs/05-safety-legal.md oder docs/06-operations.md.
+
+dry_run: true                      # Auslieferungszustand. Nur der Betreiber stellt auf false (M5).
+timezone: Europe/Zurich
+country: CH
+locale: de-CH                      # steuert Schreibweise (ss statt ß) und Datumsformate
+
+limits:
+  sends_per_day: 5
+  applications_per_week: 12
+  spontaneous_per_week: 5
+  proposals_per_day: 3             # Karten an Paula pro Tag (Einladungen/Antworten zählen nicht)
+  min_minutes_between_sends: 20
+  send_window:                     # Ortszeit
+    days: [mon, tue, wed, thu, fri]
+    start: "08:00"
+    end: "18:00"
+  proposal_window:                 # wann Paula Karten bekommt
+    days: [mon, tue, wed, thu, fri, sat]
+    start: "08:00"
+    end: "20:00"
+  companies_research_per_night: 10
+  llm_budget_usd_per_day: 3.0
+  attachment_mb_total: 8
+
+thresholds:
+  portal_score: 65                 # T5: ab hier wird ein Entwurf erzeugt
+  spontaneous_score: 75            # T5b: bewusst höher
+  classification_confidence: 0.7   # T1/T9: darunter needs_human
+
+dedup:
+  company_cooldown_days: 180
+  ignore_cooldown_for_staffing_agencies: true
+
+replies:
+  no_reply_days: 42                # danach Status no_reply + Nachfass-Vorschlag
+  auto_close_days: 90
+  approval_expiry_days: 7
+  approval_reminder_days: 3
+  max_revision_rounds: 3
+
+mail:
+  provider: gmail                  # gmail | imap
+  history_months: 24
+  label_prefix: "Paula-Agent"
+  initial_scan_query: >
+    (bewerbung OR application OR candidature OR candidatura OR absage OR
+     vorstellungsgespräch OR interview OR "ihre unterlagen" OR "your application" OR
+     "votre candidature" OR stelle OR position OR job)
+
+sources:
+  adzuna:
+    enabled: true
+    country: ch
+    max_days_old: 2
+    results_per_page: 50
+    max_pages: 2
+  mailalert:
+    enabled: true
+    senders:                       # Absender der Job-Alert-Mails → eigener Parser je Eintrag
+      - { name: jobs.ch,     match: "@jobs.ch" }
+      - { name: jobroom,     match: "@job-room.ch" }
+  careerpage:
+    enabled: false                 # ab M7
+  jobspy:
+    enabled: false                 # nur nach Entscheidung Q8
+  manual:
+    enabled: true
+
+companies:
+  discovery_sources: [seed_csv, inbox, jobs]   # + zefix / opendata ab M7
+  research_max_age_days: 180
+
+llm:
+  default_model: claude-opus-5
+  triage_model: claude-haiku-4-5
+  effort:
+    classify: low
+    score: medium
+    research: medium
+    draft: high
+    factcheck: medium
+  research_tool_max_uses: 6
+
+telegram:
+  language: de
+  form_of_address: du              # du | sie
+  bot_display_name: "Paula Bewerbungshilfe"
+  admin_may_approve: false         # nur für Tests auf true
+
+attachments:                       # Dateien in data/documents/
+  - Lebenslauf.pdf
+  - Zeugnisse.pdf

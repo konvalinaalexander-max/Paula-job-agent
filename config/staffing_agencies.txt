@@ -1,0 +1,16 @@
+# Personalvermittler (normalisierte Namen). Sperrfrist gilt für diese nicht (docs/04-integrations.md 4.4.1)
+adecco
+randstad
+manpower
+michael page
+hays
+robert half
+kelly services
+interiman
+jobcloud
+universal job
+joker personal
+das team
+work selection
+yellowshark
+art of work

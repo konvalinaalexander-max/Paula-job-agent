@@ -1,0 +1,31 @@
+# Rechtsform-Suffixe, die bei der Firmennamen-Normalisierung entfernt werden (eine pro Zeile, lowercase)
+ag
+gmbh
+sa
+sàrl
+sarl
+sagl
+kg
+ohg
+kgaa
+se
+e.u.
+e. u.
+ltd
+ltd.
+inc
+inc.
+llc
+plc
+& co
+& co.
+& cie
+& cie.
+aktiengesellschaft
+gesellschaft mit beschränkter haftung
+genossenschaft
+stiftung
+verein
+holding
+group
+gruppe

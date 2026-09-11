@@ -1,0 +1,31 @@
+# Secrets & personenbezogene Daten — NIEMALS committen
+.env
+.env.*
+!.env.example
+credentials.json
+token.json
+*.token
+data/
+!data/.gitkeep
+!data/documents/.gitkeep
+outbox/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
