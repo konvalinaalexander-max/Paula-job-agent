@@ -51,6 +51,7 @@ Keine Mails verschicken · keine Formulare ausfüllen · keine Lebensläufe umsc
 | [`docs/11-testing.md`](docs/11-testing.md) | Wie geprüft wird |
 | [`docs/12-quellen-abdeckung.md`](docs/12-quellen-abdeckung.md) | Stellenquellen Österreich: wie viel des Marktes wir erreichen |
 | [`docs/13-initiativbewerbungen.md`](docs/13-initiativbewerbungen.md) | Firmen finden, die gerade jemanden brauchen – ohne Inserat |
+| [`docs/14-arbeitsweise.md`](docs/14-arbeitsweise.md) | Warum hier kein Programm arbeitet, sondern jemand mitdenkt |
 
 ## Aufbau
 
@@ -58,7 +59,8 @@ Keine Mails verschicken · keine Formulare ausfüllen · keine Lebensläufe umsc
 CLAUDE.md      Anweisungen für die ausführende KI
 docs/          Der Plan
 scripts/       Helfer: Daten holen und schreiben (keine Urteile)
-runbooks/      Arbeitsanweisungen für die automatischen Läufe
+runbooks/      Arbeitsanweisungen für die Läufe
+memory/        Was zwischen den Läufen erhalten bleibt: Gelerntes, Strategie, Experimente
 dashboard/     Die Seite, die Paula sieht
 config/        Listen und Einstellungen
 tests/         Tests und erfundene Beispieldaten

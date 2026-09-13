@@ -115,8 +115,10 @@ Der Punkt an Lauf 3: Weil Paula dutzende CV-Fassungen verschickt hat, ist die *M
 ```
  1. jobs_fetch.py → neue Inserate aus allen aktiven Quellen
  2. Abgleich gegen die Datenbank: schon gesehen? schon beworben? Firma gesperrt?
- 3. Regel-Vorfilter: Ort, Ausmaß, Ausschlusswörter   (kostet nichts)
- 4. Claude bewertet die Übriggebliebenen (Score + Begründung + Bedenken)
+ 3. Vorfilter entfernt NUR Hartes: schon gesehen, gesperrt, Sperrfrist,
+    schon beworben. Nichts Inhaltliches — siehe docs/14-arbeitsweise.md
+ 4. Claude LIEST die Übriggebliebenen und beurteilt sie
+    (Punktwert + Begründung + Bedenken + Aufhänger)
  5. Über Schwellwert → Firma recherchieren (falls unbekannt) → Bewerbungstext schreiben
  6. Faktenprüfung gegen den Faktenblock
  7. Bestanden → Dokument in der Datenbank anlegen, Status "vorbereitet"
@@ -199,7 +201,8 @@ Kein Python-Package, keine CLI mit zwanzig Befehlen, kein SQLite. Die Skripte si
 | A8 | Profil aus der Mailbox statt aus einem Formular | Fragebogen an Paula | Die Antworten liegen schon in ihren dutzenden CV-Versionen. Schneller, vollständiger, ehrlicher |
 | A9 | Faktenblock + Stilprofil als Markdown-Dateien in der Datenbank | Vektor-Datenbank, Beispiele bei jedem Aufruf | Lesbar, von Paula korrigierbar, versionierbar |
 | A10 | Skripte holen Daten, Claude urteilt | Alles in Python mit Modellaufrufen; oder alles Claude | Deterministisches bleibt deterministisch und testbar. Urteile bleiben beim Modell mit vollem Kontext |
-| A11 | Ein Dashboard mit vier Blöcken, keine Unterseiten | Mehrseitige App mit Navigation | Paula soll alles auf einen Blick sehen. Scrollen statt klicken |
+| A11 | Ein Dashboard mit fünf Blöcken, keine Unterseiten | Mehrseitige App mit Navigation | Paula soll alles auf einen Blick sehen. Scrollen statt klicken |
+| A12 | `memory/` im Repo als Gedächtnis zwischen den Läufen | Alles in der Datenbank; oder gar kein Gedächtnis | Ohne abgelegtes Wissen wiederholt der tausendste Lauf den ersten. Getrennt von der Datenbank, weil hier **Wissen** steht und keine Personendaten – deshalb darf es ins Repo |
 
 ## Vorbehalt zu A5: Wer kann das Dashboard öffnen?
 

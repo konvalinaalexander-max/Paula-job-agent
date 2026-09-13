@@ -109,7 +109,9 @@ Mindestens 8 Texte nötig. Weniger → das Stilprofil wird als unsicher markiert
 **Bewertung:** 80+ klar bewerben · 60–79 bewerben, mit Bedenken · 40–59 grenzwertig · <40 nein.
 Ein `hard_blocker` (zwingende Anforderung, die sie nachweislich nicht erfüllt) deckelt auf 30. „Von Vorteil" und „wünschenswert" sind **nie** Blocker.
 
-**Schwellwert:** Start bei **55**, nicht 65 – wegen ihrer Lage. Nachjustieren, sobald sie zwanzig Karten bewertet hat: verwirft sie mehr als die Hälfte, Schwellwert hoch; verwirft sie fast nichts, Schwellwert runter.
+**Schwellwert:** Start bei **55**, nicht 65 – wegen ihrer Lage. Das ist ein Startwert, keine Vorgabe: nachjustieren, sobald sie zwanzig Karten bewertet hat, und die Begründung nach `memory/LERNTAGEBUCH.md`.
+
+**Vor der Beurteilung wird nicht inhaltlich gefiltert.** Der Vorfilter entfernt nur Hartes (schon gesehen, gesperrt, Sperrfrist). Ein Titel, den kein Suchbegriff trifft, und ein Inserat mit einem Ausschlusswort im Fließtext können beide passen – das entscheidet sich beim Lesen, nicht bei einer Zeichenkettensuche (`docs/14-arbeitsweise.md`).
 
 ---
 

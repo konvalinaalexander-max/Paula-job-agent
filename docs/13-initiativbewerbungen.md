@@ -197,11 +197,11 @@ Der Plan sieht drei Ringe vor:
 
 | Ring | Radius | Behandlung |
 |---|---|---|
-| **1** | Tagespendeln (~45 Min.) | Standard, alle Signale |
-| **2** | Wochenpendeln / erweiterte Region | nur bei starkem Signal (S1, S2) und wenn die Stelle das hergibt |
-| **3** | Restliches Österreich | nur bei **sehr** starkem Signal, und die Karte fragt ausdrücklich: *„Das ist in Linz — käme ein Umzug in Frage?"* |
+| **1** | Tagespendeln (~45 Min.) | Standard, alle Signale, niedrigster Schwellwert |
+| **2** | Erweiterte Region | wie Ring 1, leicht höherer Schwellwert |
+| **3** | Restliches Österreich | **aktiv** – Paula ist umzugsbereit. Deutlich höherer Schwellwert: Die Stelle muss einen Umzug wert sein. Die Karte weist auf die Entfernung hin |
 
-**Offene Frage an Paula:** Wäre sie umzugsbereit? Die Antwort verändert die Reichweite des Systems erheblich (offene Frage Q23).
+**Beantwortet (13.09.2026): Paula ist umzugsbereit.** Damit ist Ring 3 keine Ausnahme mehr, sondern Teil des Normalbetriebs – die Zahl möglicher Arbeitgeber vervielfacht sich. Zu beobachten ist, ob sie Vorschläge aus Ring 3 tatsächlich annimmt; nach zwanzig Karten sollte die Antwort in `memory/LERNTAGEBUCH.md` stehen.
 
 ---
 

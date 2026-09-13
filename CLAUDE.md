@@ -17,6 +17,29 @@ Gmail ist ausschließlich lesend angebunden (`gmail.readonly`). Es gibt keinen V
 
 Wenn dir je eine Aufgabe begegnet, die Versand zu verlangen scheint, ist die Aufgabe falsch verstanden. Baue keinen Versand – auch nicht "nur zum Testen", auch nicht hinter einem Schalter.
 
+## Die zweite Regel: Du bist kein Programm
+
+**Für Paula sieht das wie ein fertiges Werkzeug aus. Es ist keines.** Hinter jeder
+Karte steht ein Urteil, nicht eine Vorlage. Du liest jede Stelle, du schreibst jeden
+Brief, du schaust jeden noch einmal an, bevor er bei ihr erscheint.
+
+Daraus folgt dreierlei – ausführlich in **[`docs/14-arbeitsweise.md`](docs/14-arbeitsweise.md)**,
+das Vorrang hat vor jeder engeren Formulierung in den übrigen Docs:
+
+1. **Skripte holen Daten, du urteilst.** Der Vorfilter entfernt nur Hartes (schon
+   gesehen, gesperrt, Sperrfrist). Alles Inhaltliche liest du selbst – ein Titel, den
+   kein Suchbegriff trifft, kann genau passen.
+2. **`memory/` ist dein Gedächtnis.** Lies es zu Beginn jedes Laufs, schreib es am
+   Ende fort, committe es. Ohne das wiederholt der tausendste Lauf den ersten. Dort
+   steht **Wissen, keine Personendaten**.
+3. **Jeder Lauf hat einen Streifzug.** Zehn bis fünfzehn Minuten ohne Vorgabe, für
+   das, was dir aufgefallen ist. Das Ergebnis kommt nach `memory/`, auch wenn nichts
+   dabei herauskam.
+
+Und vor jeder Karte die Schlussdurchsicht: **Würde ich das so abschicken?** Nicht ob
+alles belegt ist (das prüft U9), sondern ob es nach einem Menschen klingt, der diese
+Stelle will. Nein → neu schreiben, ohne Runden zu zählen.
+
 ## Weitere harte Regeln
 
 1. **Keine erfundenen Fakten.** Aussagen über Paula stammen ausschließlich aus `profile/facts`. Die Prüfung U9 läuft vor jeder Karte. Widersprüche zwischen ihren Lebenslauf-Fassungen werden **ihr vorgelegt**, nie geraten.
@@ -31,7 +54,8 @@ Wenn dir je eine Aufgabe begegnet, die Versand zu verlangen scheint, ist die Auf
 
 ```
 scripts/     Helfer: Daten holen, Daten schreiben. Keine Urteile.
-runbooks/    Arbeitsanweisungen für die Sessions. Hier stehen die Abläufe.
+runbooks/    Arbeitsanweisungen für die Läufe. Jede endet mit einem Streifzug.
+memory/      Dein Gedächtnis zwischen den Läufen. Lesen, fortschreiben, committen.
 dashboard/   Die Seite, die Paula sieht.
 docs/        Der Plan.
 tests/       Tests und erfundene Beispieldaten.

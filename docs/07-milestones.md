@@ -98,7 +98,7 @@ Acht Etappen. Jede endet mit etwas Vorzeigbarem und einer Abnahme. **Nichts in d
 2. `scripts/sources/eures.py` – **zuerst eine Erkundungsabfrage**, Ergebnis in `docs/09-research-notes.md` festhalten, dann bauen.
 3. `scripts/sources/mailalert.py` – je Portal ein Leser mit Beispielmail als Testfall.
 4. `scripts/sources/manual.py`.
-5. Regel-Vorfilter: Ort, Ausmaß, Ausschlusswörter, gesperrte Firmen, Sperrfrist.
+5. Vorfilter **nur für Hartes**: schon gesehen, gesperrt, Sperrfrist, schon beworben. Nichts Inhaltliches – das wird gelesen (`docs/14-arbeitsweise.md`).
 6. **Firmensignale nebenbei sammeln:** Jedes Inserat, das durch den Vorfilter fällt, wird nicht weggeworfen, sondern erzeugt einen Signaleintrag bei der Firma (`docs/13-initiativbewerbungen.md`, S1). Kostet fast nichts und ist die Grundlage für M7.
 7. U6 Bewertung, U7 Firmenrecherche, U8 Text, U9 Faktenprüfung, U12 Nachbessern.
 8. `runbooks/daily-jobs.md`.

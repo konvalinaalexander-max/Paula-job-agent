@@ -17,6 +17,15 @@ Wird **nicht** abgefragt, sondern aus der Mailbox erarbeitet: aus ihren dutzende
 ### Q4 – Einwilligung ✅
 **Paula weiß davon.** Schriftliche Festhaltung in M0, damit sie den Umfang genau kennt.
 
+### Q23 – Umzugsbereitschaft ✅
+**Ja.** Damit ist Ring 3 (restliches Österreich) aktiv, nicht nur Ausnahme. Die Hürde bleibt höher als in Ring 1 – eine Stelle muss einen Umzug wert sein – und die Karte weist auf die Entfernung hin. Vervielfacht die Zahl möglicher Arbeitgeber.
+
+### Q24 – Job-Mails ✅
+**Alle.** karriere.at, willhaben Jobs, StepStone AT, hokify und METAJob. Einrichtung gehört zu M2, zehn Minuten mit Paula.
+
+### Q25 – Telefonvariante bei Kleinbetrieben ✅
+**Ja.** Bei Betrieben unter etwa zehn Mitarbeitenden zeigt die Karte Telefonnummer, beste Anrufzeit und drei Sätze Gesprächseinstieg, mit dem Mailtext als Rückfallebene.
+
 ### Q8 – Auslesen von Portalen gegen deren Bedingungen
 **Vorläufig: Nein.** Wird auch nicht gebraucht – Job-Suchaufträge per Mail decken karriere.at, willhaben, StepStone und AMS sauber ab. Frage bleibt offen, falls sich das als unzureichend erweist.
 
@@ -63,20 +72,6 @@ Wöchentliche Ausfuhr der Datenbank als JSON. Auf deinen Rechner? In eine Cloud-
 
 ### Q22 – Wer ist Ersatz-Betreiber?
 Wenn du zwei Wochen nicht kannst und etwas hängt – gibt es jemanden, der nachsehen kann? Falls nein, sollten die Meldungen so geschrieben sein, dass Paula sie versteht und weiß, an wen sie sich wendet.
-**Antwort:** _
-
-### Q23 [wichtig für M7] – Wäre Paula umzugsbereit?
-Das verändert die Reichweite erheblich. Der Plan sieht drei Ringe vor: Tagespendeln (Standard), erweiterte Region (nur bei starkem Signal), restliches Österreich (nur bei sehr starkem Signal und mit ausdrücklicher Rückfrage an sie).
-Wenn ein Umzug in Frage käme, wird Ring 3 zum Normalfall und die Zahl möglicher Arbeitgeber vervielfacht sich.
-**Antwort:** _
-
-### Q24 – Job-Mails: welche Portale einrichten?
-Vorschlag: karriere.at, willhaben Jobs, StepStone AT, hokify und METAJob – je ein täglicher Suchauftrag an ihre Adresse. Zehn Minuten Einrichtung, deckt die Portale ab, die maschinell verschlossen sind. Hat sie bei manchen schon Konten?
-**Antwort:** _
-
-### Q25 – Telefon statt Mail bei kleinen Betrieben?
-Bei Betrieben unter etwa zehn Mitarbeitern bringt ein Anruf oft mehr als eine Mail – dort liest der Chef selten Bewerbungen am Bildschirm. Soll das Dashboard in solchen Fällen die Telefonnummer und einen kurzen Gesprächsleitfaden anzeigen statt eines Mailtexts?
-*Empfehlung: ja, als zusätzliche Kartenvariante.* Kostet wenig und passt zu genau dem Teil des Marktes, in dem Initiativbewerbungen wirken.
 **Antwort:** _
 
 ---
