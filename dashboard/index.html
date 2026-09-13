@@ -1,0 +1,647 @@
+<title>Bewerbungsmappe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  :root{
+    --paper:#F6F7F5; --card:#FFFFFF; --card-sunk:#F2F4F1;
+    --ink:#1B1F1D; --ink-2:#414A45; --muted:#68736D;
+    --line:#E1E5DF; --line-soft:#EDF0EC;
+    --accent:#2F5D50; --accent-ink:#FFFFFF; --accent-soft:#E6EFEA; --accent-line:#BFD6CB;
+    --urgent:#8A5A1F; --urgent-soft:#FAF1E2; --urgent-line:#E4CBA2;
+    --warn:#7A5C12;
+    --shadow:0 1px 2px rgba(27,31,29,.05), 0 6px 20px -12px rgba(27,31,29,.18);
+    --r:10px;
+    --sans:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#141715; --card:#1C201E; --card-sunk:#222623;
+      --ink:#E9ECE8; --ink-2:#C2C9C4; --muted:#8E9992;
+      --line:#2C312E; --line-soft:#252A27;
+      --accent:#7FB8A3; --accent-ink:#12201B; --accent-soft:#1E2A26; --accent-line:#33473F;
+      --urgent:#D9A86A; --urgent-soft:#292115; --urgent-line:#4A3A22;
+      --warn:#C9A54E;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px -12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141715; --card:#1C201E; --card-sunk:#222623;
+    --ink:#E9ECE8; --ink-2:#C2C9C4; --muted:#8E9992;
+    --line:#2C312E; --line-soft:#252A27;
+    --accent:#7FB8A3; --accent-ink:#12201B; --accent-soft:#1E2A26; --accent-line:#33473F;
+    --urgent:#D9A86A; --urgent-soft:#292115; --urgent-line:#4A3A22;
+    --warn:#C9A54E;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px -12px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:16px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding-inline:20px; padding-block:32px 72px;}
+
+  /* ---------- Kopf ---------- */
+  .banner{
+    display:flex; gap:10px; align-items:baseline; flex-wrap:wrap;
+    font-size:13px; color:var(--muted);
+    border:1px dashed var(--line); border-radius:var(--r);
+    padding:10px 14px; margin-bottom:28px;
+  }
+  .banner b{color:var(--ink-2); font-weight:600}
+
+  header.top{margin-bottom:38px}
+  h1{
+    font-family:var(--serif); font-weight:400; font-size:clamp(28px,5vw,38px);
+    letter-spacing:-.01em; margin:0 0 6px; text-wrap:balance;
+  }
+  .stand{font-size:14px; color:var(--muted)}
+  .tally{
+    display:flex; flex-wrap:wrap; gap:0 22px; margin-top:18px;
+    font-size:14px; color:var(--ink-2);
+  }
+  .tally span{display:inline-flex; align-items:baseline; gap:6px}
+  .tally b{font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink)}
+
+  /* ---------- Blöcke ---------- */
+  section{margin-top:44px}
+  .sec-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    gap:16px; padding-bottom:9px; margin-bottom:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .sec-head h2{
+    font-family:var(--serif); font-weight:500; font-size:19px; margin:0;
+    letter-spacing:.005em;
+  }
+  .sec-head .n{font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums}
+  .sec-note{font-size:14px; color:var(--muted); margin:-8px 0 18px}
+
+  .stack{display:flex; flex-direction:column; gap:14px}
+
+  /* ---------- Karte ---------- */
+  .card{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden;
+  }
+  .card-top{padding:18px 20px}
+  .row1{display:flex; gap:14px; justify-content:space-between; align-items:baseline; flex-wrap:wrap}
+  .title{
+    font-family:var(--serif); font-size:19px; font-weight:500; margin:0;
+    letter-spacing:.005em; text-wrap:balance;
+  }
+  .fit{
+    flex:none; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); border:1px solid var(--accent-line);
+    padding:3px 9px; border-radius:999px; white-space:nowrap;
+  }
+  .meta{font-size:14px; color:var(--muted); margin:5px 0 0}
+  .why{margin:12px 0 0; color:var(--ink-2); max-width:62ch}
+  .flag{
+    display:flex; gap:8px; margin-top:11px; font-size:14px; color:var(--warn);
+    align-items:flex-start;
+  }
+  .flag svg{flex:none; margin-top:3px}
+
+  .actions{
+    display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center;
+    padding:13px 20px; border-top:1px solid var(--line-soft); background:var(--card-sunk);
+  }
+  .spacer{flex:1}
+
+  button{font:inherit; cursor:pointer}
+  .btn{
+    border:1px solid var(--accent); background:var(--accent); color:var(--accent-ink);
+    padding:7px 15px; border-radius:7px; font-size:14px; font-weight:600;
+    transition:filter .12s ease;
+  }
+  .btn:hover{filter:brightness(1.12)}
+  .btn.ghost{background:transparent; color:var(--accent); border-color:var(--accent-line)}
+  .btn.ghost:hover{background:var(--accent-soft); filter:none}
+  .lnk{
+    background:none; border:0; padding:4px 0; color:var(--muted);
+    font-size:14px; text-decoration:underline; text-underline-offset:3px;
+    text-decoration-color:var(--line);
+  }
+  .lnk:hover{color:var(--ink)}
+  a.lnk{display:inline-block}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+  /* ---------- Aufgeklappt ---------- */
+  .body{display:none; padding:4px 20px 20px; border-top:1px solid var(--line-soft)}
+  .card.open .body{display:block}
+  .card.open .chev{transform:rotate(180deg)}
+  .chev{transition:transform .16s ease; flex:none}
+
+  .field{
+    display:flex; gap:12px; align-items:baseline; padding:11px 0;
+    border-bottom:1px solid var(--line-soft); font-size:15px; flex-wrap:wrap;
+  }
+  .field .k{
+    flex:none; width:68px; font-size:12px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); font-weight:600;
+  }
+  .field .v{flex:1; min-width:180px; word-break:break-word}
+
+  .letter{
+    margin:18px 0 0; padding:20px 22px; background:var(--card-sunk);
+    border:1px solid var(--line-soft); border-radius:8px;
+    white-space:pre-wrap; font-size:15px; line-height:1.72; color:var(--ink-2);
+    max-width:64ch;
+  }
+  .files{display:flex; flex-direction:column; gap:7px; margin-top:16px}
+  .file{
+    display:flex; align-items:center; gap:10px; font-size:14px;
+    padding:9px 13px; border:1px solid var(--line); border-radius:7px; background:var(--card);
+  }
+  .file .nm{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .file svg{flex:none; color:var(--muted)}
+
+  /* ---------- Block 0 dringend ---------- */
+  .urgent{
+    background:var(--urgent-soft); border:1px solid var(--urgent-line);
+    border-radius:var(--r); padding:20px 22px;
+  }
+  .urgent .eyebrow{
+    font-size:12px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--urgent); margin:0 0 8px;
+  }
+  .urgent h3{font-family:var(--serif); font-weight:500; font-size:21px; margin:0 0 4px}
+  .urgent .meta{color:var(--ink-2); opacity:.85}
+  .slots{display:flex; flex-wrap:wrap; gap:9px; margin-top:16px}
+  .slot{
+    background:var(--card); border:1px solid var(--urgent-line); color:var(--ink);
+    padding:9px 15px; border-radius:7px; font-size:14px; font-weight:500;
+    font-variant-numeric:tabular-nums;
+  }
+  .slot:hover{border-color:var(--urgent); background:var(--card-sunk)}
+  .slot.plain{font-weight:400; color:var(--muted)}
+  .where{
+    margin-top:14px; font-size:14px; color:var(--ink-2);
+    display:grid; grid-template-columns:auto 1fr; gap:4px 12px; max-width:52ch;
+  }
+  .where dt{color:var(--muted)}
+  .where dd{margin:0}
+
+  /* ---------- Block 2 Liste ---------- */
+  .list{border-top:1px solid var(--line-soft)}
+  .item{
+    display:flex; gap:10px 18px; align-items:baseline; flex-wrap:wrap;
+    padding:13px 2px; border-bottom:1px solid var(--line-soft); font-size:15px;
+  }
+  .item .co{font-family:var(--serif); font-size:17px; min-width:150px; flex:1}
+  .item .ro{color:var(--muted); flex:1.4; min-width:150px}
+  .item .dt{color:var(--muted); font-size:13px; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .pill{
+    font-size:12px; padding:2px 9px; border-radius:999px; white-space:nowrap;
+    border:1px solid var(--line); color:var(--muted);
+  }
+  .pill.ok{color:var(--accent); border-color:var(--accent-line); background:var(--accent-soft)}
+  .nudge{
+    margin-top:14px; padding:13px 16px; background:var(--accent-soft);
+    border:1px solid var(--accent-line); border-radius:8px; font-size:14.5px;
+    display:flex; gap:14px; align-items:center; flex-wrap:wrap; color:var(--ink-2);
+  }
+
+  /* ---------- Block 3 Absage ---------- */
+  .quote{
+    margin:11px 0 0; padding-left:14px; border-left:2px solid var(--line);
+    font-family:var(--serif); font-style:italic; color:var(--muted); font-size:15.5px;
+    max-width:58ch;
+  }
+
+  /* ---------- Block 4 erledigt ---------- */
+  details.done{border-top:1px solid var(--line); padding-top:14px; margin-top:44px}
+  details.done summary{
+    cursor:pointer; list-style:none; font-family:var(--serif); font-size:19px;
+    font-weight:500; display:flex; align-items:center; gap:9px;
+  }
+  details.done summary::-webkit-details-marker{display:none}
+  details.done summary .n{font-family:var(--sans); font-size:13px; color:var(--muted)}
+  details.done[open] summary .chev{transform:rotate(180deg)}
+  table{width:100%; border-collapse:collapse; margin-top:18px; font-size:14.5px}
+  th{
+    text-align:left; font-size:12px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); font-weight:600; padding:0 12px 8px 0; border-bottom:1px solid var(--line);
+  }
+  td{padding:10px 12px 10px 0; border-bottom:1px solid var(--line-soft); color:var(--ink-2)}
+  td:first-child{font-family:var(--serif); font-size:16px; color:var(--ink)}
+  td.num{font-variant-numeric:tabular-nums; white-space:nowrap}
+  .tablewrap{overflow-x:auto}
+  .summary-line{
+    margin-top:20px; padding-top:16px; border-top:1px solid var(--line-soft);
+    font-size:14.5px; color:var(--muted);
+  }
+  .summary-line b{color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums}
+
+  footer{
+    margin-top:56px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:13px; color:var(--muted); display:flex; gap:8px 20px; flex-wrap:wrap;
+  }
+  footer .ops{font-variant-numeric:tabular-nums}
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(12px);
+    background:var(--ink); color:var(--paper); padding:10px 20px; border-radius:8px;
+    font-size:14.5px; font-weight:500; opacity:0; pointer-events:none;
+    transition:opacity .18s ease, transform .18s ease; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+  @media (max-width:520px){
+    .wrap{padding-block:24px 56px}
+    .field .k{width:100%}
+    .actions{gap:8px 12px}
+    .btn,.lnk{flex:none}
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="banner">
+    <b>Entwurf</b>
+    <span>Gestaltungsvorschlag mit erfundenen Beispieldaten &ndash; Firmen, Stellen und Texte sind ausgedacht.</span>
+  </div>
+
+  <header class="top">
+    <h1>Guten Morgen, Paula</h1>
+    <p class="stand">Zuletzt nachgesehen: heute um 07:32 &middot; N&auml;chste Suche um 12:30</p>
+    <div class="tally">
+      <span><b>1</b> braucht dich</span>
+      <span><b>3</b> bereit zum Senden</span>
+      <span><b>5</b> unterwegs</span>
+      <span><b>2</b> Absagen offen</span>
+    </div>
+  </header>
+
+  <!-- ══════════ BLOCK 0 ══════════ -->
+  <section>
+    <div class="sec-head">
+      <h2>Braucht dich jetzt</h2>
+      <span class="n">1</span>
+    </div>
+
+    <div class="urgent">
+      <p class="eyebrow">Einladung zum Gespr&auml;ch</p>
+      <h3>Marbach Bautr&auml;ger GmbH</h3>
+      <p class="meta">Assistenz der Projektleitung &middot; beworben am 3. September</p>
+
+      <dl class="where">
+        <dt>Wo</dt><dd>Lastenstra&szlig;e 14, 1030 Wien &mdash; 3. Stock</dd>
+        <dt>Wer</dt><dd>Frau Kienast, Personal &middot; 01 890 22 41</dd>
+      </dl>
+
+      <p style="margin:18px 0 0; font-size:15px">Welcher Termin passt dir? Dann schreibe ich die Zusage.</p>
+      <div class="slots">
+        <button class="slot">Di 16. Sept, 14:00</button>
+        <button class="slot">Do 18. Sept, 10:00</button>
+        <button class="slot plain">Anderer Termin</button>
+        <button class="slot plain">Ich antworte selbst</button>
+      </div>
+      <div style="margin-top:16px"><button class="lnk">Ganze Mail lesen</button></div>
+    </div>
+  </section>
+
+  <!-- ══════════ BLOCK 1 ══════════ -->
+  <section>
+    <div class="sec-head">
+      <h2>Bereit zum Senden</h2>
+      <span class="n">3</span>
+    </div>
+    <p class="sec-note">Alles vorbereitet. Text kopieren, Lebenslauf anh&auml;ngen, abschicken.</p>
+
+    <div class="stack">
+
+      <!-- Karte 1 -->
+      <article class="card open" id="k1">
+        <div class="card-top">
+          <div class="row1">
+            <h3 class="title">Assistenz der Gesch&auml;ftsf&uuml;hrung, 30 Wochenstunden</h3>
+            <span class="fit">Passt gut</span>
+          </div>
+          <p class="meta">Leitner &amp; S&ouml;hne OG &middot; 1050 Wien &middot; seit gestern online &middot; karriere.at</p>
+          <p class="why">Du hast bei deinen letzten beiden Stellen genau diese Aufgaben gemacht &ndash; Terminplanung, Korrespondenz, Vorbereitung von Sitzungen. Die 30 Stunden liegen in deinem Rahmen, und der F&uuml;nfte ist von dir aus gut erreichbar.</p>
+          <div class="flag">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 5.5v3.5M8 11.4v.1"/><circle cx="8" cy="8" r="6.3"/></svg>
+            <span>Sie w&uuml;nschen Erfahrung mit BMD &ndash; das steht nicht in deinen Unterlagen. Ich habe es im Text nicht erw&auml;hnt.</span>
+          </div>
+        </div>
+
+        <div class="body">
+          <div class="field"><span class="k">An</span><span class="v">bewerbung@leitner-soehne.at</span><button class="lnk" data-copy="bewerbung@leitner-soehne.at">kopieren</button></div>
+          <div class="field"><span class="k">Betreff</span><span class="v">Bewerbung als Assistenz der Gesch&auml;ftsf&uuml;hrung</span><button class="lnk" data-copy="Bewerbung als Assistenz der Geschäftsführung">kopieren</button></div>
+
+          <div class="letter" id="brief1">Sehr geehrte Frau Leitner,
+
+Ihre Ausschreibung für die Assistenz der Geschäftsführung habe ich auf karriere.at gelesen. Dass Sie ein Familienbetrieb in dritter Generation sind und die Stelle als „Drehscheibe im Haus" beschreiben, hat mich angesprochen — genau so habe ich meine bisherige Arbeit erlebt.
+
+In den vergangenen fünf Jahren habe ich bei der Donau Hochbau GmbH die Geschäftsführung entlastet: Terminkoordination für drei Führungskräfte, Vorbereitung der wöchentlichen Bauleitersitzungen, Korrespondenz mit Auftraggebern und Behörden. Mit MS Office und der Reisekostenabrechnung arbeite ich täglich.
+
+Ich suche eine Teilzeitstelle mit 30 Stunden und könnte ab Anfang November beginnen.
+
+Meine Unterlagen habe ich beigefügt. Über ein Gespräch würde ich mich freuen.
+
+Mit freundlichen Grüßen
+Paula Beispiel</div>
+
+          <div style="margin-top:12px; text-align:right">
+            <button class="lnk" data-copy-el="brief1">Ganzen Text kopieren</button>
+          </div>
+
+          <div class="files">
+            <div class="file">
+              <svg width="15" height="18" viewBox="0 0 14 17" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8.4.8H2.2A1.4 1.4 0 0 0 .8 2.2v12.6a1.4 1.4 0 0 0 1.4 1.4h9.6a1.4 1.4 0 0 0 1.4-1.4V5.4z"/><path d="M8.4.8v4.6h4.8"/></svg>
+              <span class="nm">Lebenslauf_Paula_Beispiel_2026-08.pdf</span>
+              <button class="lnk">laden</button>
+            </div>
+            <div class="file">
+              <svg width="15" height="18" viewBox="0 0 14 17" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M8.4.8H2.2A1.4 1.4 0 0 0 .8 2.2v12.6a1.4 1.4 0 0 0 1.4 1.4h9.6a1.4 1.4 0 0 0 1.4-1.4V5.4z"/><path d="M8.4.8v4.6h4.8"/></svg>
+              <span class="nm">Dienstzeugnisse.pdf</span>
+              <button class="lnk">laden</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn">In Gmail &ouml;ffnen</button>
+          <button class="btn ghost" data-toggle="k1">
+            Bewerbung <span class="tgl">zuklappen</span>
+            <svg class="chev" width="10" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.6" style="margin-left:4px" aria-hidden="true"><path d="M1 1.5 5 5.5l4-4"/></svg>
+          </button>
+          <span class="spacer"></span>
+          <button class="lnk">Text &auml;ndern</button>
+          <button class="lnk">Hab ich geschickt</button>
+          <button class="lnk">Nein danke</button>
+        </div>
+      </article>
+
+      <!-- Karte 2 -->
+      <article class="card" id="k2">
+        <div class="card-top">
+          <div class="row1">
+            <h3 class="title">Sekretariat, Vollzeit</h3>
+            <span class="fit">Passt gut</span>
+          </div>
+          <p class="meta">Ordination Dr. Weinberger &middot; 1180 Wien &middot; vor 2 Tagen &middot; willhaben</p>
+          <p class="why">Kleines Team, klassisches Ordinationssekretariat &ndash; Terminvergabe, Patientenkontakt, Abrechnung. Deine Erfahrung mit Korrespondenz und Terminkoordination passt direkt; die Umstellung auf das medizinische Umfeld ist der einzige Sprung.</p>
+          <div class="flag">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 5.5v3.5M8 11.4v.1"/><circle cx="8" cy="8" r="6.3"/></svg>
+            <span>Du hattest dich im M&auml;rz 2025 vermutlich schon einmal hier beworben &ndash; da bin ich mir nicht ganz sicher.</span>
+          </div>
+        </div>
+        <div class="body">
+          <div class="field"><span class="k">An</span><span class="v">ordination@dr-weinberger.at</span><button class="lnk" data-copy="ordination@dr-weinberger.at">kopieren</button></div>
+          <div class="field"><span class="k">Betreff</span><span class="v">Bewerbung als Sekret&auml;rin</span><button class="lnk" data-copy="Bewerbung als Sekretärin">kopieren</button></div>
+          <div class="letter" id="brief2">Sehr geehrter Herr Dr. Weinberger,
+
+Sie suchen Verstärkung für Ihr Sekretariat. Ich bewerbe mich dafür.
+
+Fünf Jahre lang war ich bei der Donau Hochbau GmbH die erste Ansprechperson am Telefon und für die Terminkoordination zuständig — in einem Betrieb, in dem an manchen Tagen viel gleichzeitig passiert. Der Umgang mit Menschen, die etwas brauchen und nicht warten wollen, ist mir vertraut.
+
+Ins medizinische Umfeld würde ich neu einsteigen. Was ich mitbringe, ist Verlässlichkeit in der Organisation und Ruhe im Umgang.
+
+Ich bin ab Anfang November verfügbar.
+
+Mit freundlichen Grüßen
+Paula Beispiel</div>
+          <div style="margin-top:12px; text-align:right"><button class="lnk" data-copy-el="brief2">Ganzen Text kopieren</button></div>
+        </div>
+        <div class="actions">
+          <button class="btn">In Gmail &ouml;ffnen</button>
+          <button class="btn ghost" data-toggle="k2">
+            Bewerbung <span class="tgl">ansehen</span>
+            <svg class="chev" width="10" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.6" style="margin-left:4px" aria-hidden="true"><path d="M1 1.5 5 5.5l4-4"/></svg>
+          </button>
+          <span class="spacer"></span>
+          <button class="lnk">Text &auml;ndern</button>
+          <button class="lnk">Hab ich geschickt</button>
+          <button class="lnk">Nein danke</button>
+        </div>
+      </article>
+
+      <!-- Karte 3, Initiativ -->
+      <article class="card" id="k3">
+        <div class="card-top">
+          <div class="row1">
+            <h3 class="title">Initiativbewerbung</h3>
+            <span class="fit">Einen Versuch wert</span>
+          </div>
+          <p class="meta">Nordlicht Verlag GmbH &middot; 1070 Wien &middot; rund 25 Mitarbeitende</p>
+          <p class="why">Kleiner Sachbuchverlag, der seit dem Fr&uuml;hjahr ein zweites B&uuml;ro in der Neubaugasse betreibt. Auf ihrer Karriereseite steht, dass sie Initiativbewerbungen ausdr&uuml;cklich begr&uuml;&szlig;en &ndash; ausgeschrieben ist derzeit nichts.</p>
+        </div>
+        <div class="body">
+          <div class="field"><span class="k">An</span><span class="v">office@nordlicht-verlag.at</span><button class="lnk" data-copy="office@nordlicht-verlag.at">kopieren</button></div>
+          <div class="field"><span class="k">Gefunden</span><span class="v"><a href="#" class="lnk">Karriereseite des Verlags</a></span></div>
+          <div class="field"><span class="k">Betreff</span><span class="v">Initiativbewerbung &ndash; Assistenz und B&uuml;roorganisation</span><button class="lnk" data-copy="Initiativbewerbung – Assistenz und Büroorganisation">kopieren</button></div>
+          <div class="letter" id="brief3">Sehr geehrte Damen und Herren,
+
+auf Ihrer Website habe ich gelesen, dass Sie sich über Initiativbewerbungen freuen. Da Sie im Frühjahr ein zweites Büro eröffnet haben, versuche ich es.
+
+Ich habe fünf Jahre lang die Geschäftsführung eines Hochbauunternehmens entlastet — Termine, Korrespondenz, Sitzungsvorbereitung, Ablage. Was dort ein Bauleiterteam war, ist bei Ihnen ein Lektorat; die Arbeit dahinter ist verwandt.
+
+Falls bei Ihnen Bedarf in der Assistenz oder Büroorganisation entsteht, würde ich mich über ein Gespräch freuen. Meine Unterlagen liegen bei.
+
+Mit freundlichen Grüßen
+Paula Beispiel</div>
+          <div style="margin-top:12px; text-align:right"><button class="lnk" data-copy-el="brief3">Ganzen Text kopieren</button></div>
+        </div>
+        <div class="actions">
+          <button class="btn">In Gmail &ouml;ffnen</button>
+          <button class="btn ghost" data-toggle="k3">
+            Bewerbung <span class="tgl">ansehen</span>
+            <svg class="chev" width="10" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.6" style="margin-left:4px" aria-hidden="true"><path d="M1 1.5 5 5.5l4-4"/></svg>
+          </button>
+          <span class="spacer"></span>
+          <button class="lnk">Text &auml;ndern</button>
+          <button class="lnk">Hab ich geschickt</button>
+          <button class="lnk">Nein danke</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ══════════ BLOCK 2 ══════════ -->
+  <section>
+    <div class="sec-head">
+      <h2>Unterwegs</h2>
+      <span class="n">5</span>
+    </div>
+    <p class="sec-note">Abgeschickt, noch keine Entscheidung. Hier musst du nichts tun.</p>
+
+    <div class="list">
+      <div class="item"><span class="co">Marbach Bautr&auml;ger</span><span class="ro">Assistenz Projektleitung</span><span class="dt">3. Sept</span><span class="pill ok">Gespr&auml;ch vereinbart</span></div>
+      <div class="item"><span class="co">Steirer Logistik</span><span class="ro">Sachbearbeitung Disposition</span><span class="dt">5. Sept</span><span class="pill">Eingang best&auml;tigt</span></div>
+      <div class="item"><span class="co">Kanzlei H&ouml;fer</span><span class="ro">Sekretariat Teilzeit</span><span class="dt">8. Sept</span><span class="pill">still</span></div>
+      <div class="item"><span class="co">Winkler Elektrotechnik</span><span class="ro">B&uuml;roorganisation</span><span class="dt">9. Sept</span><span class="pill">still</span></div>
+      <div class="item"><span class="co">Alpenhof Hotelbetrieb</span><span class="ro">Assistenz der Direktion</span><span class="dt">28. Juli</span><span class="pill">still</span></div>
+    </div>
+
+    <div class="nudge">
+      <span>Beim Alpenhof ist es jetzt sieben Wochen her. Soll ich h&ouml;flich nachfragen?</span>
+      <span class="spacer"></span>
+      <button class="btn ghost">Text vorbereiten</button>
+      <button class="lnk">Nein</button>
+    </div>
+  </section>
+
+  <!-- ══════════ BLOCK 3 ══════════ -->
+  <section>
+    <div class="sec-head">
+      <h2>Absagen &ndash; kurze Antwort liegt bereit</h2>
+      <span class="n">2</span>
+    </div>
+    <p class="sec-note">Zwei S&auml;tze Danke. Kostet dich zwanzig Sekunden und bleibt in Erinnerung.</p>
+
+    <div class="stack">
+      <article class="card open" id="a1">
+        <div class="card-top">
+          <div class="row1">
+            <h3 class="title">Thalhammer Handel GmbH</h3>
+          </div>
+          <p class="meta">Sachbearbeitung Einkauf &middot; beworben am 21. August &middot; Absage gestern</p>
+          <blockquote class="quote">&bdquo;&hellip; haben wir uns nach sorgf&auml;ltiger Pr&uuml;fung f&uuml;r eine andere Bewerberin entschieden. Wir danken Ihnen f&uuml;r Ihr Interesse &hellip;&ldquo;</blockquote>
+        </div>
+        <div class="body">
+          <div class="field"><span class="k">An</span><span class="v">personal@thalhammer-handel.at</span><button class="lnk" data-copy="personal@thalhammer-handel.at">kopieren</button></div>
+          <div class="letter" id="dank1">Sehr geehrte Frau Prantl,
+
+vielen Dank für Ihre Rückmeldung und dafür, dass Sie sich die Zeit genommen haben. Schade, dass es diesmal nicht gepasst hat.
+
+Sollte sich bei Ihnen künftig etwas ergeben, freue ich mich, wenn Sie an mich denken.
+
+Mit freundlichen Grüßen
+Paula Beispiel</div>
+          <div style="margin-top:12px; text-align:right"><button class="lnk" data-copy-el="dank1">Text kopieren</button></div>
+        </div>
+        <div class="actions">
+          <button class="btn">In Gmail antworten</button>
+          <button class="btn ghost" data-toggle="a1">
+            Antwort <span class="tgl">zuklappen</span>
+            <svg class="chev" width="10" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.6" style="margin-left:4px" aria-hidden="true"><path d="M1 1.5 5 5.5l4-4"/></svg>
+          </button>
+          <span class="spacer"></span>
+          <button class="lnk">Nicht antworten</button>
+        </div>
+      </article>
+
+      <article class="card" id="a2">
+        <div class="card-top">
+          <div class="row1">
+            <h3 class="title">Bezirksamt Liesing</h3>
+          </div>
+          <p class="meta">Kanzleikraft &middot; beworben am 12. August &middot; Absage vor 3 Tagen</p>
+          <blockquote class="quote">&bdquo;&hellip; die Stelle wurde intern besetzt. Ihre Unterlagen behalten wir gerne f&uuml;r sechs Monate in Evidenz &hellip;&ldquo;</blockquote>
+        </div>
+        <div class="body">
+          <div class="field"><span class="k">An</span><span class="v">post@bezirksamt-liesing.gv.at</span><button class="lnk" data-copy="post@bezirksamt-liesing.gv.at">kopieren</button></div>
+          <div class="letter" id="dank2">Sehr geehrte Damen und Herren,
+
+danke für Ihre Nachricht. Dass Sie meine Unterlagen in Evidenz behalten, freut mich — ich bleibe an einer Tätigkeit bei Ihnen interessiert.
+
+Mit freundlichen Grüßen
+Paula Beispiel</div>
+          <div style="margin-top:12px; text-align:right"><button class="lnk" data-copy-el="dank2">Text kopieren</button></div>
+        </div>
+        <div class="actions">
+          <button class="btn">In Gmail antworten</button>
+          <button class="btn ghost" data-toggle="a2">
+            Antwort <span class="tgl">ansehen</span>
+            <svg class="chev" width="10" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.6" style="margin-left:4px" aria-hidden="true"><path d="M1 1.5 5 5.5l4-4"/></svg>
+          </button>
+          <span class="spacer"></span>
+          <button class="lnk">Nicht antworten</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════ BLOCK 4 ══════════ -->
+  <details class="done">
+    <summary>
+      Erledigt
+      <svg class="chev" width="11" height="7" viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 1.5 5 5.5l4-4"/></svg>
+      <span class="n">23</span>
+    </summary>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Firma</th><th>Stelle</th><th>Beworben</th><th>Ergebnis</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pichler Spedition</td><td>Sachbearbeitung</td><td class="num">14. Aug</td><td>Absage, beantwortet</td></tr>
+          <tr><td>Hausverwaltung Ebner</td><td>Assistenz</td><td class="num">9. Aug</td><td>Absage, beantwortet</td></tr>
+          <tr><td>Kraml Installationen</td><td>B&uuml;ro allround</td><td class="num">2. Aug</td><td>Stelle zur&uuml;ckgezogen</td></tr>
+          <tr><td>Wiener Fachbuchhandel</td><td>Kundenbetreuung</td><td class="num">25. Juli</td><td>keine Antwort</td></tr>
+          <tr><td>Donau Immobilien</td><td>Empfang</td><td class="num">18. Juli</td><td>Absage nach Gespr&auml;ch</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="summary-line">Seit Beginn: <b>23</b> Bewerbungen &middot; <b>4</b> Einladungen &middot; Antwortquote <b>39&nbsp;%</b></p>
+  </details>
+
+  <footer>
+    <span>Zuletzt nachgesehen heute um 07:32</span>
+    <span class="spacer"></span>
+    <span class="ops">Betrieb: 142 Inserate gepr&uuml;ft &middot; 3 vorbereitet &middot; keine Fehler</span>
+  </footer>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toast = document.getElementById('toast'), t;
+  function say(msg){
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(t); t = setTimeout(function(){ toast.classList.remove('show'); }, 1900);
+  }
+  function copy(text, what){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ say(what + ' kopiert'); },
+                                              function(){ say('Kopieren hat nicht geklappt'); });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); say(what + ' kopiert'); }
+      catch(e){ say('Kopieren hat nicht geklappt'); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-copy]');
+    if (el) { copy(el.getAttribute('data-copy'), 'Adresse'); return; }
+
+    el = e.target.closest('[data-copy-el]');
+    if (el) {
+      var src = document.getElementById(el.getAttribute('data-copy-el'));
+      if (src) copy(src.textContent, 'Text');
+      return;
+    }
+
+    el = e.target.closest('[data-toggle]');
+    if (el) {
+      var card = document.getElementById(el.getAttribute('data-toggle'));
+      if (!card) return;
+      card.classList.toggle('open');
+      var lbl = el.querySelector('.tgl');
+      if (lbl) lbl.textContent = card.classList.contains('open') ? 'zuklappen' : 'ansehen';
+      return;
+    }
+
+    el = e.target.closest('.slot');
+    if (el) {
+      if (el.classList.contains('plain')) { say('Im Entwurf noch ohne Funktion'); return; }
+      say(el.textContent.trim() + ' — Zusage wird vorbereitet');
+      return;
+    }
+  });
+})();
+</script>
