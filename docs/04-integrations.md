@@ -53,74 +53,106 @@ PDF über `pypdf`, DOCX über `python-docx`. Gescannte PDFs ohne Textebene → d
 
 ## 4.2 Stellenquellen für Österreich
 
-Der Markt ist hier anders als in der Schweiz oder Deutschland: **karriere.at**, **willhaben Jobs** und **StepStone AT** dominieren, das **AMS** hat die größte öffentliche Sammlung – und keine davon bietet eine offene Schnittstelle für Suchende.
+> Ausführliche Begründung und Abdeckungsanalyse: **[`docs/12-quellen-abdeckung.md`](12-quellen-abdeckung.md)**
 
-### Rangfolge der Quellen
+Vier Wege, die sich ergänzen. Keiner allein reicht, zusammen decken sie den Markt ab.
 
-| # | Quelle | Zugang | Bewertung |
+| # | Quelle | Zugang | Rolle |
 |---|---|---|---|
-| 1 | **Adzuna Österreich** | Offizielle Schnittstelle, kostenlos, Kennung per Registrierung | **Primärquelle.** Aggregiert unter anderem österreichische Portale. Startpunkt der Umsetzung |
-| 2 | **Job-Mails der Portale** | Suchaufträge, die Paula bei karriere.at, willhaben, StepStone, AMS einrichtet | **Die wichtigste Quelle für Österreich.** Sauber, stabil, vom Portal selbst vorgesehen. Deckt genau die Portale ab, die keine Schnittstelle haben |
-| 3 | **Karriereseiten** einzelner Firmen | Öffentlich | Für Firmen, die Paula interessieren. Viele nutzen Personio/Greenhouse/Lever mit offenen Job-Listen |
-| 4 | **Von Paula eingereichte Links** | Dashboard | Sie sieht etwas, fügt den Link ein, das System bereitet die Bewerbung vor |
-| 5 | AMS „alle jobs" direkt | Schwierig | Die Suche läuft zwar über eine JSON-Schnittstelle, aber jede Anfrage braucht ein signiertes Merkmal, das nur die eigene Weboberfläche erzeugen kann. Ohne echten Browser nicht nutzbar. **Deshalb: E-Mail-Suchauftrag statt Abruf** |
-| 6 | willhaben / karriere.at direkt | Nein | Keine offene Schnittstelle; fertige Auslese-Dienste existieren, verstoßen aber gegen die Nutzungsbedingungen. Nur nach ausdrücklicher Entscheidung (offene Frage Q8) |
+| 1 | **EURES** (EU-Stellenportal) | Öffentliche Schnittstelle, ohne Anmeldung | **Der Weg zu den AMS-Stellen.** Die nationalen Arbeitsverwaltungen melden dorthin |
+| 2 | **METAJob.at** | Job-Mail, evtl. RSS | Größte Meta-Suchmaschine Österreichs. Findet auch Stellen, die **nirgends inseriert** sind – von KMU, NGOs, öffentlichen Stellen, direkt von Firmenwebsites |
+| 3 | **Adzuna AT** | Offizielle Schnittstelle, kostenloser Schlüssel | Stabile Primärquelle, aggregiert die großen Portale |
+| 4 | **Job-Mails der Portale** | Suchaufträge, die Paula einrichtet | karriere.at, willhaben, StepStone, hokify – der einzige vorgesehene maschinelle Weg dorthin |
 
-### 4.2.1 Adzuna (Primärquelle)
+Dazu: von Paula eingereichte Links, Karriereseiten beobachteter Firmen.
 
-Registrierung auf dem Entwicklerportal ergibt Kennung und Schlüssel. Abfrage:
+### 4.2.1 EURES
+
+```
+POST https://europa.eu/eures/api/jv-searchengine/public/jv-search/search
+GET  https://europa.eu/eures/api/jv-searchengine/public/jv/id/{id}?requestLang=de
+```
+
+Ohne Anmeldung. Der Suchkörper nimmt `keywords`, `locationCodes` (NUTS-Regionen, Österreich `AT`), `publicationPeriod`, `positionScheduleCodes` (Arbeitszeit), `occupationUris` (ESCO-Berufscodes), `requiredLanguages`, `page`, `resultsPerPage`, `sortSearch` (`MOST_RECENT`). Ergebnis: Arbeitgeber, Ort, Gehalt, Bewerbungskontakt, ESCO-Einordnung. Höchstens 10.000 Treffer pro Suche – für uns bedeutungslos.
+
+Die Endpunkte sind nur von der Gemeinschaft dokumentiert (nicht offiziell). Sie können sich ändern, ohne Ankündigung. Deshalb: Testfälle, und nach drei Fehlläufen schaltet sich die Quelle selbst ab.
+
+**Erste Aufgabe in M4 [prüfen]:** Wie viele österreichische Stellen liefert EURES, und sind die AMS-Stellen tatsächlich enthalten? Davon hängt ab, wie wichtig diese Quelle ist.
+
+### 4.2.2 METAJob.at
+
+Durchsucht laufend das österreichische Web – Portale **und** Firmenwebsites – und kommt auf rund 108.000 Stellen. Die für Paula entscheidende Eigenschaft: Dort stehen auch Stellen kleiner Betriebe, die sich die Portalgebühren sparen. Auf solche Stellen bewerben sich zehn Leute, nicht zweihundert.
+
+Zugang: Job-Mail einrichten. Ob es RSS gibt, ist in M4 zu prüfen.
+
+### 4.2.3 Adzuna
 
 ```
 https://api.adzuna.com/v1/api/jobs/at/search/1
-  ?app_id=…&app_key=…
-  &what=Projektassistenz&where=Wien&distance=30
+  ?app_id=…&app_key=…&what=…&where=Wien&distance=30
   &max_days_old=2&results_per_page=50&sort_by=date
 ```
 
-Land `at`. Felder: Titel, Firma, Ort, Beschreibung (**gekürzt**), Weiterleitungslink, Datum, Gehalt.
+Zwei Fallen: Die Beschreibung ist ein **Auszug** – ab Schwellwert wird die Zielseite geladen und der Volltext über die eingebettete Stellenbeschreibung geholt. Und als Firma steht oft ein **Personalvermittler** (ISG, epunkt, Hill, Trenkwalder, Manpower…); für die gilt die 180-Tage-Sperre nicht, die Karte weist aber darauf hin. Liste in `config/staffing_agencies.txt`.
 
-**Zwei Fallen:**
-- Die Beschreibung ist ein Auszug. Sobald eine Stelle über dem Schwellwert liegt, wird die Zielseite geladen und der Volltext über die eingebettete Stellenbeschreibung (`JobPosting`-Auszeichnung) oder den Haupttext geholt. Klappt das nicht, wird mit dem Auszug weitergearbeitet und das vermerkt.
-- Als Firma steht oft der **Personalvermittler** (ISG, epunkt, Hill, Trenkwalder, Manpower…). Für diese gilt die 180-Tage-Sperre nicht, weil man sich bei derselben Agentur auf verschiedene Stellen bewirbt – aber die Karte weist darauf hin. Liste in `config/staffing_agencies.txt`.
+Kostenloses Kontingent beim Registrieren prüfen. Drei Läufe täglich mit vier Suchbegriffen bleiben darunter.
 
-Das kostenlose Kontingent liegt in der Größenordnung von einigen hundert bis tausend Abfragen im Monat – **beim Registrieren nachsehen**. Drei Läufe täglich mit vier Suchbegriffen und ein bis zwei Seiten bleiben darunter.
+### 4.2.4 Job-Mails der Portale
 
-### 4.2.2 Job-Mails der Portale (`scripts/sources/mailalert.py`)
+Paula richtet bei **karriere.at**, **willhaben Jobs**, **StepStone AT**, **hokify** und **METAJob** je einen täglichen Suchauftrag an ihre Adresse ein. Das System erkennt die Mails am Absender und liest Titel, Firma, Ort und Link heraus.
 
-Der pragmatische Kern der Österreich-Lösung. Paula richtet bei **karriere.at**, **willhaben Jobs**, **StepStone AT** und **AMS alle jobs** je einen täglichen Suchauftrag ein, der an ihre Adresse geht. Das System erkennt diese Mails am Absender, liest Titel, Firma, Ort und Link heraus und behandelt sie wie jede andere Stellenquelle.
+Warum das die richtige Lösung ist und nicht ein Notbehelf: Es ist der Weg, den die Portale selbst anbieten. Kein Verstoß gegen Nutzungsbedingungen, keine Sperre, kein Bruch beim nächsten Seiten-Umbau. Und es erreicht genau die Portale, die maschinell verschlossen sind.
 
-Warum das die beste Lösung ist: Es ist genau der Weg, den die Portale selbst anbieten. Kein Verstoß, keine Sperre, keine kaputte Auslese nach dem nächsten Seiten-Umbau. Und es deckt exakt die Portale ab, an die man sonst nicht herankommt.
+Ein kleiner Leser je Portal, mit einer Beispielmail als Testfall. Einrichtung: zehn Minuten mit Paula, gehört zu M2.
 
-Je Portal ein kleiner Leser mit einer Beispielmail als Testfall. Der Volltext wird bei Bedarf über den Link nachgeladen (mit Pause zwischen Abrufen, `robots.txt` beachtet, Kennung im User-Agent).
+### 4.2.5 Einmalig: Jooble
 
-Einrichtung gehört in Etappe M2 und braucht zehn Minuten mit Paula.
+Kostenloser Zugang auf Anfrage, aber mit einem Gesamtkontingent von 500 Abfragen je Schlüssel. Nicht für den Dauerbetrieb – gut für einen einmaligen breiten Durchgang zu Beginn, um den Bestand zu füllen.
 
-### 4.2.3 Karriereseiten (`scripts/sources/careerpage.py`)
+### 4.2.6 Karriereseiten und eingereichte Links
 
-Für Firmen mit `careers_url`: täglich laden, Stellen über die `JobPosting`-Auszeichnung oder Linkmuster herausziehen. Häufige Plattformen mit offenen Stellenlisten: Personio (in Österreich sehr verbreitet), Greenhouse, Lever, SmartRecruiters, Workday. Für die ersten vier lohnt je ein kleiner Leser – die Listen sind offen abrufbar und ändern sich selten.
+Für beobachtete Firmen: täglich die Karriereseite laden, Stellen über die eingebettete Stellenbeschreibung herausziehen. Häufige Plattformen mit offenen Stellenlisten: Personio (in Österreich verbreitet), Greenhouse, Lever, SmartRecruiters.
 
-### 4.2.4 Von Paula eingereicht (`scripts/sources/manual.py`)
+Eingereichte Links: Paula fügt im Dashboard einen Link ein, der nächste Lauf holt die Stellenbeschreibung.
 
-Sie fügt im Dashboard einen Link ein. Der nächste Lauf lädt die Seite, holt die Stellenbeschreibung und bereitet die Bewerbung vor. Lässt sich die Seite nicht lesen, fragt die Karte nach dem Text zum Einfügen.
+### 4.2.7 Was die Abdeckung wirklich begrenzt
 
----
+Nicht die Zahl der Quellen, sondern die **Breite der Suchbegriffe**. Wer nur nach einer Berufsbezeichnung sucht, verpasst die fünf anderen Bezeichnungen für dieselbe Arbeit. Deshalb wird das Suchprofil in Phase 1 aus ihren bisherigen Bewerbungen erarbeitet, bewusst breit angesetzt und erweitert, sobald im Datenstrom neue Bezeichnungen für verwandte Rollen auftauchen.
 
-## 4.3 Firmen für Initiativbewerbungen (Österreich)
+## 4.3 Firmen für Initiativbewerbungen
 
-| Quelle | Zugang | Anmerkung |
+> Die vollständige Strategie steht in **[`docs/13-initiativbewerbungen.md`](13-initiativbewerbungen.md)**. Hier nur die technischen Zugänge.
+
+Das Grundprinzip: nicht Firmenlisten abarbeiten, sondern **Signale für Einstellungsbedarf** erkennen. Angeschrieben wird nur, wo sich ein Satz formulieren lässt, der ausschließlich auf diese Firma zutrifft.
+
+### Grundgesamtheit – welche Firmen existieren
+
+| Quelle | Inhalt | Zugang |
 |---|---|---|
-| **WKO Firmen A–Z** | Öffentliches Branchenverzeichnis | Nahezu vollständig für gewerbliche Betriebe, nach Branche und Bezirk durchsuchbar. Nutzungsbedingungen vor automatisiertem Abruf prüfen; notfalls von Hand exportieren |
-| **data.gv.at** | Offene Verwaltungsdaten | Enthält verschiedene Unternehmensdatensätze; vor M6 sichten, was nutzbar ist |
-| **Firmenbuch / Wirtschafts-Compass** | Einzelabfragen kostenlos | Kein Massenabruf. Gut zur Prüfung einzelner Firmen |
-| **Firmen aus Paulas Mailbox** | intern | Wo sie schon war – und ähnliche Firmen |
-| **Firmen aus Inseraten** | intern | Wer inseriert, stellt ein. Auch wenn die konkrete Stelle nicht passte |
-| **Startliste** `config/companies_seed.csv` | Alexander und Paula | Die Firmen, die sie ohnehin im Kopf hat. **Bester Startpunkt** |
+| **OpenStreetMap / Overpass** | Alle erfassten Betriebe mit Name, Adresse, Website, Telefon, Branche. Bezirksweise abfragbar | Offen, ohne Schlüssel, ODbL (Namensnennung). **Bester Einstieg** |
+| **GISA** (Gewerbeinformationssystem Austria) | Zentrales Gewerberegister: Name, Standort, Gewerbeberechtigung | Kostenlose Online-Abfrage **[prüfen]** |
+| **WKO Firmen A–Z** | Branchenverzeichnis nach Branche und Bezirk | Öffentlich, Bedingungen für automatisierten Abruf **[prüfen]** |
+| **Firmenbuch-Neueintragungen** | Täglich veröffentlichte Neueintragungen und Änderungen | Öffentlich |
+| Aus dem eigenen Bestand | Firmen aus Paulas Mailbox, aus jedem gesehenen Inserat, aus Vergabedaten | intern |
 
-Ablauf: sammeln → regelbasiert vorsortieren (Branche, Umkreis, Größe, nicht gesperrt) → nur die besten zehn pro Nacht recherchieren (U7) → bewerten → Text vorbereiten.
+### Signalquellen – wo gerade Bedarf entsteht
 
-Ausdrücklich nicht: Google-Maps-Massenabfragen, LinkedIn-Firmenauslese, gekaufte Adresslisten.
+| Signal | Quelle | Aufwand |
+|---|---|---|
+| Firma schreibt mehrere andere Stellen aus | **Der eigene Inseratsstrom** – kostet nichts extra | trivial |
+| Firma hat einen öffentlichen Auftrag gewonnen | **OffeneVergaben.at**, tägliches CSV, alle Zuschläge über 50.000 € | gering |
+| Inserat läuft ungewöhnlich lange | eigener Bestand über die Zeit | trivial |
+| Firmenbuch-Bewegung | Neueintragungen und Änderungen | mittel |
+| Wachstumsnachricht | **wiederkehrende Websuchen** nach Bezirk und Branche | gering |
+| Branchennachbarschaft | eigene Firmendatenbank | trivial |
+| Regionale Nachfrage | **AMS-Daten auf data.gv.at**: offene Stellen nach Bezirk und Beruf (Summen, keine Einzelinserate) | gering |
+| Alte Kontakte | Bewerbungshistorie aus Phase 0 | trivial |
 
----
+Sechs der acht fallen aus Daten ab, die das System ohnehin verarbeitet.
+
+### Ausdrücklich nicht
+
+Keine Massenabfragen bei Kartendiensten, kein Auslesen sozialer Netzwerke, keine gekauften Adresslisten, keine Signale über einzelne **Personen** – nur über Firmen, und nur aus öffentlich bekannten Tatsachen.
 
 ## 4.4 Das Dashboard
 

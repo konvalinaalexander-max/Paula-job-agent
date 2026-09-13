@@ -87,20 +87,26 @@ Acht Etappen. Jede endet mit etwas Vorzeigbarem und einer Abnahme. **Nichts in d
 
 **Ziel:** Jeden Tag liegen passende, fertige Bewerbungen im Dashboard.
 
+**Quellen, in dieser Reihenfolge** (Begründung: `docs/12-quellen-abdeckung.md`):
+1. **Adzuna** – offiziell und stabil, beweist zuerst, dass die ganze Kette funktioniert
+2. **EURES** – erst prüfen, wie viele österreichische Stellen und ob AMS enthalten; dann bauen
+3. **Job-Mails** – karriere.at, willhaben, StepStone, hokify, METAJob; ein Leser je Portal
+4. **Eingereichte Links**
+
 **Aufgaben:**
 1. `scripts/sources/adzuna.py` mit Volltext-Nachladen; Vermittler-Erkennung.
-2. `scripts/sources/mailalert.py` – ein Leser je Portal, mit Beispielmail als Testfall.
-3. `scripts/sources/manual.py`.
-4. Regel-Vorfilter: Ort, Ausmaß, Ausschlusswörter, gesperrte Firmen, Sperrfrist.
-5. U6 Bewertung, U7 Firmenrecherche, U8 Text, U9 Faktenprüfung, U12 Nachbessern.
-6. `runbooks/daily-jobs.md` – die Anweisung für den täglichen Lauf.
-7. Testfälle: 15 Inserate mit Erwartungsband, 3 mit eingebauten Anweisungen.
+2. `scripts/sources/eures.py` – **zuerst eine Erkundungsabfrage**, Ergebnis in `docs/09-research-notes.md` festhalten, dann bauen.
+3. `scripts/sources/mailalert.py` – je Portal ein Leser mit Beispielmail als Testfall.
+4. `scripts/sources/manual.py`.
+5. Regel-Vorfilter: Ort, Ausmaß, Ausschlusswörter, gesperrte Firmen, Sperrfrist.
+6. **Firmensignale nebenbei sammeln:** Jedes Inserat, das durch den Vorfilter fällt, wird nicht weggeworfen, sondern erzeugt einen Signaleintrag bei der Firma (`docs/13-initiativbewerbungen.md`, S1). Kostet fast nichts und ist die Grundlage für M7.
+7. U6 Bewertung, U7 Firmenrecherche, U8 Text, U9 Faktenprüfung, U12 Nachbessern.
+8. `runbooks/daily-jobs.md`.
+9. Testfälle: 15 Inserate mit Erwartungsband, 3 mit eingebauten Anweisungen.
 
-**Fertig, wenn:** Eine Woche Betrieb von Hand. Mindestens 15 Karten erzeugt. Paula hat mindestens fünf Bewerbungen abgeschickt. Alexander liest alle Texte gegen und findet keine erfundene Angabe.
+**Fertig, wenn:** Eine Woche Betrieb von Hand. Mindestens 15 Karten erzeugt. Paula hat mindestens fünf Bewerbungen abgeschickt. Alexander liest alle Texte gegen und findet keine erfundene Angabe. Die Zahl der täglich gefundenen Stellen ist bekannt und plausibel – zu wenige heißt: Suchbegriffe zu eng.
 
 **Abnahme:** Beide. Paula sagt, ob die Vorschläge taugen.
-
----
 
 ## M5 – Der Rückkanal
 
@@ -138,22 +144,29 @@ Acht Etappen. Jede endet mit etwas Vorzeigbarem und einer Abnahme. **Nichts in d
 
 ## M7 – Initiativbewerbungen
 
-**Ziel:** Auch Firmen ohne Ausschreibung werden angesprochen.
+**Ziel:** Firmen finden, von denen Paula nichts weiß, und zwar solche, die gerade jemanden brauchen, ohne es auszuschreiben.
 
-**Aufgaben:**
-1. Firmenliste aufbauen: Startliste, Firmen aus der Mailbox, Firmen aus Inseraten, WKO-Verzeichnis (Bedingungen prüfen), data.gv.at sichten.
-2. Regelbasiert vorsortieren → `priority_score`.
-3. Nachts die besten zehn recherchieren (U7), bewerten, Text vorbereiten – Variante „Initiativ".
-4. Prüfung: Empfängeradresse muss zur Firmendomain passen. Keine Adresse → Karte zeigt stattdessen den Link zum Bewerbungsformular.
-5. Ähnlichkeitsprüfung gegen die letzten 20 Texte (kein Serienbrief).
-6. Karriereseiten-Beobachtung für recherchierte Firmen.
-7. Schalter im Dashboard: Initiativbewerbungen an/aus.
+**Grundlage:** `docs/13-initiativbewerbungen.md`. Das Prinzip in einem Satz: **kein Signal, kein Brief.** Angeschrieben wird nur, wo sich ein Satz formulieren lässt, der ausschließlich auf diese Firma zutrifft.
 
-**Fertig, wenn:** Fünf Nächte gelaufen, mindestens fünf Initiativ-Karten, Alexander prüft die Recherchen stichprobenartig gegen die echten Websites – keine erfundenen Adressen.
+**Aufgaben, in dieser Reihenfolge** – die ersten drei liefern schon brauchbare Ergebnisse:
 
-**Hinweis:** Das ist bewusst die **letzte** Etappe. Sie ist die teuerste, unsicherste und am schwersten zu beurteilende. Bis dahin läuft das System seit Wochen stabil mit ausgeschriebenen Stellen.
+1. **S1 – Inseratsstrom auswerten.** Die Signale aus M4 sind bereits gesammelt. Firmen mit ≥ 3 ausgeschriebenen Stellen in 60 Tagen hochstufen. *Kostet fast nichts, größter Sofortgewinn.*
+2. **S2 – Vergabedaten.** Tägliches CSV von OffeneVergaben.at, Zuschläge über 50.000 € in Paulas Region, Auftragnehmer über die Firmenbuchnummer eindeutig zuordnen. Auftragsgegenstand und Summe merken – das ist der Aufhänger.
+3. **S9 – alte Kontakte.** Firmen, bei denen sie früher weit kam, aus der Historie von Phase 0.
+4. **S6 – Branchennachbarschaft.** Aus jedem gut passenden Inserat: gleiche Branche, gleicher Bezirk, ähnliche Größe.
+5. **Grundgesamtheit** über OpenStreetMap aufbauen, bezirksweise, über mehrere Nächte.
+6. **S5 – Websuchen** nach Wachstumsnachrichten, 3–5 pro Nacht, nach Bezirk und Branche.
+7. **S4** Firmenbuch-Bewegungen, **S3** Standzeit von Inseraten, **S7** AMS-Regionaldaten.
+8. Bewertung (Signalstärke × Nähe × Größe × Aktualität), Recherche der zehn stärksten pro Nacht, U7 → U8 Variante „Initiativ" → U9.
+9. Prüfungen: Empfängeradresse muss zur Firmendomain passen; Ähnlichkeit zu den letzten 20 Texten unter 0,7; Signal nicht älter als 90 Tage; keine Adresse gefunden → Karte zeigt Bewerbungsformular oder Telefonnummer statt Mail.
+10. Drei Ringe für die Entfernung (`docs/13`), Ring 3 nur mit ausdrücklicher Rückfrage an Paula.
+11. Schalter im Dashboard: Initiativbewerbungen an/aus.
 
----
+**Fertig, wenn:** Fünf Nächte gelaufen. Mindestens fünf Initiativ-Karten, **jede mit einem belegten Aufhänger**. Alexander prüft die Aufhänger stichprobenartig gegen die Originalquelle – keine erfundene Adresse, kein erfundener Auftrag, keine falsch zugeordnete Firma. Paula liest die Briefe und sagt, ob sie sie so verschicken würde.
+
+**Warum zuletzt:** Die Etappe baut auf allem anderen auf – auf der Firmendatenbank aus Phase 0, auf dem Inseratsstrom aus M4, auf dem bestätigten Faktenblock, auf einem Dashboard, das sie schon benutzt. Bis dahin läuft das System seit Wochen stabil.
+
+**Der Teil, der nie fertig wird:** Die Signalschleife läuft danach dauerhaft und wird mit der Zeit besser, weil die Firmenbasis wächst und Signale nachkommen. Firmen ohne Signal bleiben liegen und werden jede Nacht neu betrachtet – das ist die Antwort auf „ganz Österreich": Das System *kennt* mit der Zeit ganz Österreich, *schreibt* aber nur dorthin, wo gerade etwas passiert.
 
 ## M8 – Später, nur nach neuer Entscheidung
 

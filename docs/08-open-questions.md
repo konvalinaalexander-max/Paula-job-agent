@@ -65,6 +65,20 @@ Wöchentliche Ausfuhr der Datenbank als JSON. Auf deinen Rechner? In eine Cloud-
 Wenn du zwei Wochen nicht kannst und etwas hängt – gibt es jemanden, der nachsehen kann? Falls nein, sollten die Meldungen so geschrieben sein, dass Paula sie versteht und weiß, an wen sie sich wendet.
 **Antwort:** _
 
+### Q23 [wichtig für M7] – Wäre Paula umzugsbereit?
+Das verändert die Reichweite erheblich. Der Plan sieht drei Ringe vor: Tagespendeln (Standard), erweiterte Region (nur bei starkem Signal), restliches Österreich (nur bei sehr starkem Signal und mit ausdrücklicher Rückfrage an sie).
+Wenn ein Umzug in Frage käme, wird Ring 3 zum Normalfall und die Zahl möglicher Arbeitgeber vervielfacht sich.
+**Antwort:** _
+
+### Q24 – Job-Mails: welche Portale einrichten?
+Vorschlag: karriere.at, willhaben Jobs, StepStone AT, hokify und METAJob – je ein täglicher Suchauftrag an ihre Adresse. Zehn Minuten Einrichtung, deckt die Portale ab, die maschinell verschlossen sind. Hat sie bei manchen schon Konten?
+**Antwort:** _
+
+### Q25 – Telefon statt Mail bei kleinen Betrieben?
+Bei Betrieben unter etwa zehn Mitarbeitern bringt ein Anruf oft mehr als eine Mail – dort liest der Chef selten Bewerbungen am Bildschirm. Soll das Dashboard in solchen Fällen die Telefonnummer und einen kurzen Gesprächsleitfaden anzeigen statt eines Mailtexts?
+*Empfehlung: ja, als zusätzliche Kartenvariante.* Kostet wenig und passt zu genau dem Teil des Marktes, in dem Initiativbewerbungen wirken.
+**Antwort:** _
+
 ---
 
 ## Vorschläge (nicht bauen ohne Entscheidung)

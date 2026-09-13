@@ -49,6 +49,8 @@ Keine Mails verschicken · keine Formulare ausfüllen · keine Lebensläufe umsc
 | [`docs/09-research-notes.md`](docs/09-research-notes.md) | Was recherchiert wurde, was verworfen |
 | [`docs/10-dashboard.md`](docs/10-dashboard.md) | Die Oberfläche, Block für Block |
 | [`docs/11-testing.md`](docs/11-testing.md) | Wie geprüft wird |
+| [`docs/12-quellen-abdeckung.md`](docs/12-quellen-abdeckung.md) | Stellenquellen Österreich: wie viel des Marktes wir erreichen |
+| [`docs/13-initiativbewerbungen.md`](docs/13-initiativbewerbungen.md) | Firmen finden, die gerade jemanden brauchen – ohne Inserat |
 
 ## Aufbau
 
