@@ -1,63 +1,51 @@
-# 11 – Teststrategie
+# 11 – Wie geprüft wird
 
-Ziel: Der Betreiber kann jede Etappe abnehmen, ohne Paulas echte Daten zu riskieren, und die ausführende KI kann Prompts verbessern, ohne Bewerbungen zu verschicken.
+> **Version 2.** Zwei Arten von Prüfung, weil es zwei Arten von Arbeit gibt.
 
-## Ebenen
+## Das deterministische: normale Tests
 
-| Ebene | Werkzeug | Was |
+Die Skripte in `scripts/` tun nichts, was Urteilsvermögen braucht. Sie werden mit `pytest` geprüft, gegen erfundene Beispieldaten.
+
+| Was | Prüfung |
+|---|---|
+| `dedup.py` | „Muster GmbH" / „Muster Ges.m.b.H." / „MUSTER Gesellschaft m.b.H., Wien" → **eine** Firma. „Muster GmbH Wien" vs. „Muster OG Graz" → **zwei**. Umlaute, Bindestriche, `& Co KG` |
+| `extract.py` | Zitatketten entfernen, Signatur abschneiden, HTML zu Text, PDF lesen, DOCX lesen, kaputtes PDF → saubere Fehlermeldung statt Absturz |
+| `db_io.py` | Pflichtfelder fehlen → Abbruch. Unerlaubter Statusübergang (`ready` → `rejected`) → Abbruch. Dokument zu groß → Abbruch. Zweimal dasselbe schreiben → keine Dublette |
+| `sources/adzuna.py` | Gegen aufgezeichnete Antworten: Felder richtig zugeordnet, Vermittler erkannt, gekürzte Beschreibung gekennzeichnet |
+| `sources/mailalert.py` | Je Portal eine Beispielmail → richtige Anzahl Stellen, Titel/Firma/Ort/Link stimmen |
+| `checks.py` | Text mit erfundener Jahreszahl → erkannt. Text mit `[Platzhalter]` → erkannt. Zu ähnlich zu einem früheren Text → erkannt |
+| Gmail-Abruf | Gegen einen nachgebauten Dienst: Seitenweise Abfrage, Fortsetzung nach Abbruch, Rückfall wenn die History zu alt ist |
+
+Vor jedem Commit: `pytest` und `ruff check .`.
+
+## Das urteilende: Prüffälle zum Durchspielen
+
+Urteile lassen sich nicht wie Funktionen testen – dieselbe Frage kann zweimal leicht verschieden beantwortet werden. Stattdessen: feste Prüffälle, die in jeder Etappe von Hand durchgespielt werden, mit protokolliertem Ergebnis in `tests/judgements/JJJJ-MM-TT.md`.
+
+Die Fälle stehen in `docs/03-llm-tasks.md` am Ende. Kurzfassung:
+
+| Urteil | Prüffall | Bestanden wenn |
 |---|---|---|
-| Unit | `pytest` | Normalisierung, Fingerprints, Status-Maschine, Limits, Sendefenster, MIME-Parsing, Callback-Parsing, Renderer |
-| Integration (gemockt) | `pytest` + `respx` (httpx) + Gmail-Service-Fake | Adapter (Adzuna etc.) gegen aufgezeichnete Antworten; Telegram-Handler gegen Fake-Updates; Versand-Layer gegen Fake-Mailclient |
-| LLM-Golden-Tests | `pytest -m llm` (nur auf Anfrage, kostet Geld) | Prompts gegen Fixture-Fälle mit erwarteten Bändern |
-| End-to-End im Dry-Run | manuell, Runbook | Ganzer Zyklus mit Sandbox-Mailbox und Test-Telegram-Chat |
-| Abnahme | Betreiber + Paula | Pro Etappe (siehe `07-milestones.md`) |
+| U1 | 40 erfundene Mails, 12 davon bewerbungsbezogen | alle 12 gefunden, höchstens 3 Fehlalarme |
+| U2 | 20 Mails aller Arten | Art in mindestens 18 Fällen richtig |
+| U3 | 6 Lebenslauf-Fassungen mit 3 eingebauten Widersprüchen | alle 3 landen in `open_questions`, keiner wird stillschweigend aufgelöst |
+| U6 | 15 Inserate mit Erwartungsband | alle im Band |
+| U6 | 3 Inserate mit eingebautem Anweisungstext | Bewertung unbeeinflusst, Auffälligkeit vermerkt |
+| U8 | 5 Entwürfe | Länge im Band, Grußformel aus dem Stilprofil, keine verbotene Floskel, jede Behauptung belegt |
+| U9 | 3 Texte mit eingebauten Erfindungen | alle erkannt, Schweregrad richtig |
+| U11 | Einladung mit zwei Terminvorschlägen | **kein** Termin zugesagt, Platzhalter steht |
+| U11 | Rückfrage mit unbeantwortbarer Frage | Lücke sichtbar gelassen, nichts erfunden |
 
-## Fixtures (`tests/fixtures/`)
+## Erfundene Beispieldaten
 
-Alle **synthetisch**, keine echten Daten. Die ausführende KI erzeugt sie in M1–M6, jeweils mit Erwartungswerten in einer `expected.yaml` daneben.
+Alles in `tests/fixtures/` ist **erfunden**. Keine echten Namen, keine echten Firmen, keine echten Mails. Eine fiktive Person mit österreichischem Lebenslauf, sechs Fassungen davon mit absichtlichen Widersprüchen, vierzig Mails in deutscher und englischer Sprache, fünfzehn Inserate vom österreichischen Markt.
 
-- `mails/` – 60+ `.eml`: Bewerbungen gesendet (DE/FR/EN, CH-Stil), Eingangsbestätigungen (automatisch, persönlich), Absagen (kurz, lang, freundlich, formal), Einladungen (mit 1/2/0 Terminvorschlägen), Rückfragen, Angebote, Jobportal-Newsletter, Job-Alert-Mails (jobs.ch, job-room, Indeed-Format), Spam, private Mails, Mails mit Zitatketten, HTML-only-Mails, Mails mit Injection-Text.
-- `jobs/` – 25 Inserate als JSON (`RawJob`): gute Treffer, Grenzfälle, klare Fehltreffer, Personalvermittler, mit Hard-Blockern, Injection-Inserate, FR/IT-Inserate, gekürzte Beschreibung.
-- `companies/` – 10 Recherche-Ergebnisse (`CompanyResearch`) für T5b/T7-Tests, inkl. `no_contact`, `accepts_spontaneous=no`.
-- `profile/` – `facts.test.md`, `style_profile.test.md`, `profile.test.yaml` für eine fiktive Person "Paula Muster".
-- `adzuna/` – 3 aufgezeichnete API-Antworten (anonymisiert).
-- `telegram/` – Update-JSONs für jeden Flow (Command, Callback, Freitext, unbekannter Nutzer).
+Der Grund ist nicht nur Datenschutz: Erfundene Fälle lassen sich mit bekannter Wahrheit bauen. Bei echten Mails weiß niemand, was „richtig" gewesen wäre.
 
-## Pflicht-Tests (müssen existieren, bevor eine Etappe als "done" gilt)
+## Der Probelauf ohne Wirkung
 
-**Sicherheit (M5, `tests/test_send_guard.py`):**
-- Jede der 10 Prüfungen in `mail/send.py` einzeln durchfallen lassen → kein Versand, Event mit Grund.
-- Approval von falscher `chat_id` → kein Versand.
-- Doppelter Callback → genau ein Versand.
-- `dry_run=true` → Datei in outbox, Status `sent`, kein Mailclient-Aufruf.
-- Kill-Switch gesetzt → alle Batch-Entrypoints beenden sich sofort.
+Jedes Skript und jede Anweisung versteht `--dry-run`: alles wird berechnet und ausgegeben, aber nichts in die Datenbank geschrieben. Für Änderungen an der Bewertung oder an den Texten ist das der Normalweg – erst ansehen, dann schreiben.
 
-**Dedup (M1/M4, `tests/test_dedup.py`):**
-- "Müller AG" / "Mueller AG" / "MÜLLER AG, Zürich" / "Müller Aktiengesellschaft" → eine Firma.
-- "Müller AG Zürich" vs "Müller GmbH Berlin" → zwei Firmen.
-- Gleiches Inserat aus Adzuna und Mailalert → ein `jobs`-Eintrag.
-- Sperrfrist: Bewerbung vor 100 Tagen → blockiert; vor 200 Tagen → erlaubt; Personalvermittler → nicht blockiert.
-- Historische Bewerbung mit `confidence 0.5` → Warnung, nicht Block.
+## Was es hier **nicht** braucht
 
-**Status-Maschine (`tests/test_state.py`):** Jeder erlaubte Übergang ok; jeder verbotene (`discovered → sent`, `rejected_by_user → approved`) wirft.
-
-**Injection (`tests/test_injection.py`, `-m llm`):** 3 Inserate + 2 Mails mit Anweisungstext → Score im erwarteten Band, `concerns` erwähnt Auffälligkeit, Entwurf enthält keine der injizierten Inhalte, kein Empfänger außerhalb der Firmen-Domain.
-
-**Faktentreue (`tests/test_factcheck.py`):** Entwurf mit erfundener Zahl → regelbasiert erkannt; Entwurf mit erfundenem Skill → T8 erkennt (`-m llm`); sauberer Entwurf → `passed`.
-
-**Golden-Tests Prompts (`tests/test_llm_golden.py`, `-m llm`):** T1 Accuracy ≥ 90 % `kind`; T5 alle Fixture-Inserate im Erwartungsband; T7 Länge im Band, Grußformeln aus Stilprofil, keine verbotenen Phrasen, alle `claims` im Faktenblock. Ergebnis wird als `tests/llm_results/<datum>.json` gespeichert (in Git, damit Prompt-Änderungen vergleichbar sind).
-
-## Dry-Run-Modus
-
-`settings.dry_run: true`:
-- `send.py` schreibt `.eml` nach `data/outbox/` statt zu senden.
-- Telegram geht **echt** (das ist ja das, was getestet wird) – aber an `TELEGRAM_USER_CHAT_ID`, und der kann in der Testphase Alexanders eigener Chat sein.
-- LLM-Calls gehen echt (kosten Geld; `--no-llm` in Batch-Befehlen schaltet auf Fixture-Antworten um, für Verdrahtungstests).
-
-## Sandbox-Mailbox
-
-Für M1–M5: ein **eigenes Gmail-Testkonto** des Betreibers, in das er 20–30 der synthetischen Fixture-Mails schickt (Skript `tests/tools/seed_mailbox.py` sendet sie über SMTP an das Testkonto). Erst nach Abnahme von M5 wird auf Paulas Konto umgestellt. So wird der gesamte Pfad inkl. OAuth, History-API, Labels an einer echten Mailbox geprüft, ohne Paulas Daten.
-
-## Was bei jeder Etappe grün sein muss
-
-`uv run ruff check . && uv run ruff format --check . && uv run pytest` (ohne `-m llm`). LLM-Tests einmal pro Etappe manuell mit Kostenausweis im Etappenbericht.
+Keine Versand-Sicherheitstests. Es gibt keinen Versand. Das war in Version 1 der umfangreichste Testblock des ganzen Projekts – ersatzlos entfallen, weil die Fähigkeit fehlt statt abgesichert zu sein.

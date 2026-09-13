@@ -1,73 +1,63 @@
 # 09 – Recherche-Notizen
 
-Stand: September 2026. Alles mit **[verifizieren]** wurde nur aus Suchergebnissen abgeleitet und muss die ausführende KI vor der Nutzung in der jeweiligen Etappe selbst prüfen (Endpunkt aufrufen, Doku lesen, `robots.txt` lesen).
+Stand: September 2026. Einträge mit **[prüfen]** stammen aus Suchergebnissen und müssen vor der Nutzung selbst verifiziert werden.
 
-## Bestehende Projekte – was wir gelernt haben
+## Stellenquellen Österreich
 
-| Projekt | Was es macht | Was wir übernehmen | Was wir bewusst anders machen |
-|---|---|---|---|
-| **ApplyPilot** (github.com/Pickle-Pixel/ApplyPilot, AGPL) | 6-stufige Pipeline: Discover → Enrich → Score (1–10) → Tailor → Cover Letter → Auto-Apply über Browser-Automation. Dedup per URL | Die Stufenlogik; Score-Schwellwert vor teuren Schritten; Anreicherung über JSON-LD `JobPosting` | **Kein** Auto-Apply, **kein** CV-Umschreiben, Freigabe-Schritt statt Vollautomatik, Dedup per Firmenidentität statt URL, AGPL-Code nicht übernehmen (Lizenz) |
-| **AIHawk / linkedIn_auto_jobs_applier** und Forks | LinkedIn-Easy-Apply-Bot mit GPT-Antworten auf Formularfragen | Nichts direkt; zeigt, was schiefgeht (Konto-Sperren, generische Texte) | Kein LinkedIn, keine Formulare |
-| **python-jobspy** (github.com/speedyapply/JobSpy, MIT) | Scraper-Bibliothek für Indeed/LinkedIn/Glassdoor/Google/ZipRecruiter, ein Aufruf → DataFrame; Indeed/Glassdoor unterstützen CH/AT/DE | Optionaler Adapter (Q8). `RawJob`-Felder orientieren sich an deren Spaltenschema | Nur nach Entscheidung; nie LinkedIn; automatische Deaktivierung bei Bruch |
-| **Job-apply-AI-agent** (imon333) | n8n + Selenium + OpenAI, Google Sheets als DB | Idee "Tabelle als Wahrheit" → bei uns SQLite | Kein n8n (zusätzliche Plattform ohne Nutzen für einen Nutzer) |
-| **anandanair/job-scraper** | Scraping + CV-Parsing + Scoring auf GitHub Actions | Bestätigt: Scoring gegen CV funktioniert | GitHub Actions ungeeignet wegen personenbezogener DB |
-
-Gemeinsamer Befund: Alle öffentlichen Projekte optimieren auf **Menge** (50+ Bewerbungen/Stunde) und haben **keinen Freigabe-Schritt**. Kein einziges liest die Mailbox für Dedup oder Antwort-Tracking. Genau diese Lücken sind unser Kern.
-
-## Jobquellen
-
-| Quelle | Land | Status | Notizen |
-|---|---|---|---|
-| **Adzuna API** | CH, AT, DE (+16) | Offiziell, kostenlos, App-ID/Key | Free-Tier-Limit in Größenordnung "einige hundert bis 1.000 Calls/Monat" **[verifizieren beim Registrieren]**. Endpoint `api.adzuna.com/v1/api/jobs/{cc}/search/{page}`. Beschreibung gekürzt |
-| **Bundesagentur für Arbeit Jobsuche** | DE | Inoffiziell dokumentiert (bundesAPI/jobsuche-api) | `rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v4/app/jobs`, Header `X-API-Key: jobboerse-jobsuche`, Details `/pc/v4/jobdetails/{base64(refnr)}`. Keine Limits dokumentiert |
-| **job-room.ch** | CH | Web-App mit internem JSON-Endpunkt **[verifizieren]**; offizielle API nur zum *Publizieren* (SECO, Zugang per Mail) | Stellenmeldepflicht-Inserate 5 Tage exklusiv. Apify-Scraper existieren → Endpunkt ist nutzbar. E-Mail-Suchagent als saubere Alternative |
-| **jobs.ch / jobup.ch** | CH | Keine öffentliche API gefunden | E-Mail-Suchagent (4.4.6). Möglicherweise über Adzuna aggregiert **[verifizieren]** |
-| **AMS alle jobs** | AT | Keine öffentliche Such-API; HR-API nur Arbeitgeber | E-Mail-Suchagent oder interner Endpunkt **[verifizieren]** |
-| **karriere.at, StepStone** | AT/DE | Keine öffentliche API | E-Mail-Suchagenten |
-| **Indeed** | alle | RSS eingestellt; keine API für Suchende | Nur via JobSpy (Q8) oder E-Mail-Alert |
-| **LinkedIn** | alle | Keine API; aktive Anti-Scraping-Maßnahmen | Nur /add oder E-Mail-Alert |
-| **Google Jobs** | alle | Keine API | Nur via JobSpy (Q8) |
-| **Karriereseiten-Plattformen** | alle | Greenhouse (`boards-api.greenhouse.io/v1/boards/{slug}/jobs`), Lever (`api.lever.co/v0/postings/{slug}`), Personio (`{slug}.jobs.personio.de/search.json` o. ä.), SmartRecruiters (`api.smartrecruiters.com/v1/companies/{slug}/postings`) – alle öffentlich, kein Key **[Pfade verifizieren]** | Erkennung über Link-Muster auf der Karriereseite. In CH häufig auch Prospective/Ostendis/Umantis – haben meist RSS oder JSON-LD |
-
-## Firmen-Discovery
-
-| Quelle | Land | Status |
+| Quelle | Zugang | Beurteilung |
 |---|---|---|
-| **Zefix PublicREST** (`zefix.admin.ch/ZefixPublicREST/`) | CH | Kostenloses Konto, Basic Auth, Einzelabfragen (Name/UID/Ort). Kein Bulk. Swagger-Doku vorhanden **[verifizieren: Suchparameter für Ort + Rechtsform, Rate-Limit]** |
-| **opendata.swiss** Handelsregister-Datensätze | CH (einige Kantone: BS, SZ, …) | Offene CSV/JSON; je Kanton anderes Schema |
-| **OffeneRegister.de** | DE | Bulk-Dump, Snapshot |
-| **WKO Firmen A–Z** | AT | Web-Suche, keine API |
+| **Adzuna AT** | Offizielle Schnittstelle, kostenlose Kennung, Land `at` | **Primärquelle.** Österreich ist unter den unterstützten Ländern. Kontingent beim Registrieren prüfen **[prüfen]** |
+| **AMS „alle jobs"** (`jobs.ams.at`) | Die Suche läuft über eine JSON-Schnittstelle, aber jede Anfrage braucht ein signiertes Merkmal, das nur die eigene Weboberfläche erzeugt. Fertige Auslese-Dienste umgehen das mit einem echten Browser | Direkter Abruf praktisch nicht möglich und rechtlich fragwürdig. **→ E-Mail-Suchauftrag** |
+| **karriere.at** | Keine öffentliche Schnittstelle für Suchende gefunden. (Die AMS-„HR-API" richtet sich an Arbeitgeber) | **→ E-Mail-Suchauftrag** |
+| **willhaben Jobs** | Größter Marktplatz Österreichs, über 17.000 Stellen; keine offene Schnittstelle | **→ E-Mail-Suchauftrag** |
+| **StepStone AT** | Keine offene Schnittstelle | **→ E-Mail-Suchauftrag** |
+| **Karriereseiten-Plattformen** | Personio (in Österreich sehr verbreitet), Greenhouse, Lever, SmartRecruiters haben offen abrufbare Stellenlisten **[Pfade prüfen]** | Lohnt sich für beobachtete Firmen |
+| LinkedIn | Keine Schnittstelle, aktive Gegenwehr | Nicht. Nur über eingereichte Links |
 
-## Mail
+**Der entscheidende Befund für Österreich:** Alle großen Portale sind maschinell verschlossen. Der Weg über E-Mail-Suchaufträge ist deshalb nicht ein Notbehelf, sondern die *richtige* Lösung – er ist vom Portal vorgesehen, verstößt gegen nichts, bricht nicht bei Seitenänderungen und deckt genau die Quellen ab, die sonst fehlen würden.
 
-- Google phast App-Passwörter aus; OAuth 2.0 ist der Weg. Gmail API mit Desktop-OAuth-Client funktioniert headless über Copy-Paste-Flow. **Gotcha:** OAuth-App im Status "Testing" → Refresh-Token läuft nach 7 Tagen ab → "In Production" setzen (keine Verifizierung nötig unter 100 Nutzern, Warnbildschirm akzeptieren).
-- Microsoft stellt Basic Auth für IMAP/POP ein (Outlook.com) → dort wäre MSAL/OAuth nötig. Nur relevant bei Q3 = Outlook.
+## Firmendaten Österreich
 
-## Telegram
+| Quelle | Zugang |
+|---|---|
+| **WKO Firmen A–Z** | Öffentliches Branchenverzeichnis, nach Branche und Bezirk. Nahezu vollständig für gewerbliche Betriebe. Bedingungen für automatisierten Abruf prüfen **[prüfen]** |
+| **data.gv.at** | Offene Verwaltungsdaten, verschiedene Unternehmensdatensätze. Vor M7 sichten **[prüfen]** |
+| **Firmenbuch (justiz.gv.at)**, **Wirtschafts-Compass** | Einzelabfragen, teils kostenlos. Kein Massenabruf |
+| Mailbox und Inserate | Die besten Kandidaten – Firmen mit Bezug zu ihr bzw. mit Einstellungsbedarf |
 
-- Bot-API kostenlos, Long Polling ohne öffentlichen Port, Inline-Keyboards mit Callback-Daten (max. 64 Bytes), Nachrichten max. 4096 Zeichen, `editMessageText`/`editMessageReplyMarkup` für Statusupdates. `python-telegram-bot` v21+ async.
-- WhatsApp Business API: kostenpflichtig, Meta-Business-Verifizierung, Templates für selbst-initiierte Nachrichten → ungeeignet. Signal: keine offizielle API.
+## Bestehende Projekte – was sie lehren
 
-## Anthropic API (aus der aktuellen SDK-Dokumentation, Stand Juni 2026)
+| Projekt | Ansatz | Übernommen | Verworfen |
+|---|---|---|---|
+| **ApplyPilot** (AGPL) | Sechsstufige Kette: finden → anreichern → bewerten → Lebenslauf anpassen → Anschreiben → **automatisch absenden** | Die Stufenlogik; Bewertung vor teuren Schritten; Anreicherung über eingebettete Stellenbeschreibungen | Automatisches Absenden; automatisch umgebaute Lebensläufe; Lizenz |
+| **AIHawk** und Abkömmlinge | Bot für Formular-Bewerbungen mit generierten Antworten | – | Alles. Zeigt, was schiefgeht: gesperrte Konten, generische Texte |
+| **JobSpy** (MIT) | Auslese-Bibliothek für mehrere Portale | Die Feldstruktur für normalisierte Stellen | Nutzung selbst (Bedingungen; für Österreich ohnehin schwach) |
 
-- Modelle: `claude-opus-5` ($5/$25 pro 1M In/Out), `claude-haiku-4-5` ($1/$5), `claude-sonnet-5` ($2/$10). Exakte IDs ohne Datumssuffix.
-- Thinking: `thinking={"type":"adaptive"}`; `output_config={"effort": "low|medium|high"}`. Kein `budget_tokens`.
-- Strukturierte Ausgaben: `client.messages.parse(..., output_format=PydanticModel)`.
-- Server-Tools: `web_search_20260209`, `web_fetch_20260209` mit `max_uses`, `allowed_domains`. Ein Call, Schleife serverseitig.
-- Batches API für den historischen Scan (50 % Rabatt, asynchron).
-- Prompt-Caching: `cache_control` auf stabilen Blöcken; Reihenfolge tools → system → messages; Cache-Treffer über `usage.cache_read_input_tokens` prüfen.
-- Server-side-Fallbacks (`fallbacks`) und `stop_reason == "refusal"` behandeln.
-- PDF als `document`-Block (base64), für T4.
+**Gemeinsamer Befund:** Alle öffentlichen Projekte optimieren auf Menge und haben keinen menschlichen Kontrollpunkt. Keines liest die Mailbox, um Doppelbewerbungen zu vermeiden oder Antworten zu verfolgen. Genau diese Lücken – und der bewusste Verzicht aufs Absenden – sind der Kern dieses Projekts.
+
+## Gmail
+
+- Zugriff über die offizielle Schnittstelle mit Anmeldung; App-Passwörter werden abgeschafft.
+- `format=metadata` überträgt **nur** Kopfzeilen – der Inhalt verlässt Googles Server gar nicht. Das ist die technische Grundlage der Datensparsamkeits-Auflage.
+- **Falle:** Bleibt das Projekt im Status „Testing", verfällt die Anmeldung nach sieben Tagen. Auf „In Produktion" setzen; eine Verifizierung ist unter 100 Nutzern nicht nötig.
+- Der Link `https://mail.google.com/mail/?view=cm&to=…&su=…&body=…` öffnet ein vorausgefülltes Nachrichtenfenster. Länge begrenzt **[an einem langen Text prüfen]**.
+
+## Dashboard-Plattform
+
+- Veröffentlichte Seite mit dauerhafter Datenbank (Dokumentspeicher), Dateiablage und Download-Funktion. Von der Seite **und** aus der Claude-Session beschreibbar.
+- Zugriffsrechte nach Freigabestufe steuerbar: lesen für alle Zugelassenen, schreiben nur für bestimmte Bereiche.
+- **Einschränkung:** organisationsintern, nicht öffentlich teilbar. Daraus folgt Q17.
+- Dokumente max. 256 KiB – für Bewerbungstexte reichlich, Mailtexte werden gekürzt.
 
 ## Verworfen
 
-- **Managed Agents / Agent-Frameworks:** Für einen agentischen Schritt (T6) mit Server-Tools nicht nötig; würde Deployment und Kostenmodell verkomplizieren.
-- **Vektor-Datenbank für Stil/Fakten:** Zwei Markdown-Dateien im gecachten Systemprompt sind billiger, lesbarer und korrigierbar.
-- **GitHub Actions als Runtime:** Kein persistenter Zustand; personenbezogene DB müsste ins Repo.
-- **Transaktionsmail-Dienste (SendGrid, Mailgun):** Falsche Absender-Infrastruktur für Bewerbungen, Tracking, Reputationsrisiko.
-- **Google-Places-Massenabfragen für Firmen:** Kosten + AGB.
-- **PDF-Anschreiben generieren (V1):** Aufwand ohne Nutzen, Mailtext ist das Anschreiben.
+- **Eigener Server (VPS):** Mit Dashboard-Datenbank und Routinen nicht nötig. Bleibt der Plan B, falls die Zugangsfrage es erzwingt.
+- **Anthropic-Schnittstelle mit eigenem Schlüssel:** Getrennte Kosten ohne Gegenwert, wenn die Arbeit ohnehin in Sessions läuft.
+- **Telegram:** Durch das Dashboard ersetzt. Bliebe eine Option für Benachrichtigungen (Q21).
+- **Automatischer Versand:** Vom Auftraggeber gestrichen. Die beste Entscheidung im ganzen Projekt.
+- **Automatisch umgebaute Lebensläufe:** Heikel (Wahrheit, Formatierung) bei geringem Nutzen gegenüber einem guten Anschreiben.
+- **SQLite:** Kein Server, der eine Datei behalten könnte.
 
-## Abweichungen (von der ausführenden KI zu pflegen)
+## Abweichungen
 
-*(Datum – Was im Plan stand – Was tatsächlich gilt – Was stattdessen gemacht wurde)*
+*(Hier einträgt die ausführende KI, wo der Plan sich als falsch erwiesen hat. Format: Datum – was im Plan stand – was tatsächlich gilt – was stattdessen gemacht wurde.)*

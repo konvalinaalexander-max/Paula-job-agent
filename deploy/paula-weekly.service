@@ -1,9 +1,0 @@
-[Unit]
-Description=Paula Job Agent – Wochenreport
-
-[Service]
-Type=oneshot
-User=paula
-WorkingDirectory=/opt/paula
-EnvironmentFile=/opt/paula/.env
-ExecStart=/opt/paula/.venv/bin/paula report --weekly --send

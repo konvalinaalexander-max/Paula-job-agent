@@ -1,52 +1,36 @@
 [project]
 name = "paula-job-agent"
-version = "0.0.1"
-description = "Halbautomatisches Bewerbungssystem mit Freigabe-Schleife über Telegram"
+version = "0.2.0"
+description = "Bereitet Bewerbungen vor - Paula sendet selbst. Siehe docs/."
 requires-python = ">=3.12"
 readme = "README.md"
 dependencies = [
-  "anthropic>=1.0",
-  "pydantic>=2.7",
-  "pydantic-settings>=2.3",
-  "pyyaml>=6.0",
-  "httpx>=0.27",
-  "typer>=0.12",
-  "structlog>=24.1",
-  "python-telegram-bot>=21.0",
+  # Gmail, nur lesend
   "google-api-python-client>=2.130",
   "google-auth-oauthlib>=1.2",
   "google-auth-httplib2>=0.2",
+  # Stellenquellen
+  "httpx>=0.27",
   "beautifulsoup4>=4.12",
   "lxml>=5.2",
+  # Lebenslaeufe lesen
+  "pypdf>=4.2",
+  "python-docx>=1.1",
+  # Firmennamen vergleichen
   "rapidfuzz>=3.9",
   "python-dateutil>=2.9",
-  "tenacity>=8.3",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5", "respx>=0.21", "freezegun>=1.5"]
-jobspy = ["python-jobspy"]   # nur nach Entscheidung Q8
-
-[project.scripts]
-paula = "paula.cli:app"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/paula"]
+dev = ["pytest>=8", "ruff>=0.5", "respx>=0.21"]
 
 [tool.ruff]
 line-length = 110
 target-version = "py312"
-src = ["src", "tests"]
+src = ["scripts", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["llm: ruft echte Modelle auf, kostet Geld; nur mit -m llm"]
-addopts = "-m 'not llm'"
-asyncio_mode = "auto"

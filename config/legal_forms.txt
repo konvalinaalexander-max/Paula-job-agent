@@ -1,31 +1,42 @@
-# Rechtsform-Suffixe, die bei der Firmennamen-Normalisierung entfernt werden (eine pro Zeile, lowercase)
-ag
+# Rechtsform-Bestandteile, die beim Normalisieren von Firmennamen entfernt werden.
+# Österreich zuerst, dann Nachbarländer (Firmen sind oft grenzüberschreitend tätig).
 gmbh
-sa
-sàrl
-sarl
-sagl
-kg
+ges.m.b.h.
+gesmbh
+ges m b h
+gesellschaft m.b.h.
+gesellschaft mit beschraenkter haftung
+ag
+aktiengesellschaft
+og
 ohg
-kgaa
-se
+kg
+gmbh & co kg
+gmbh & co og
 e.u.
 e. u.
+eingetragener unternehmer
+se
+privatstiftung
+stiftung
+verein
+genossenschaft
+gen
+egen
+kfm
+handelsgesellschaft
+holding
+group
+gruppe
+& co
+& co.
+& partner
+sa
+sarl
+srl
 ltd
 ltd.
 inc
 inc.
-llc
-plc
-& co
-& co.
-& cie
-& cie.
-aktiengesellschaft
-gesellschaft mit beschränkter haftung
-genossenschaft
-stiftung
-verein
-holding
-group
-gruppe
+bv
+nv

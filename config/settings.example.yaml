@@ -1,94 +1,61 @@
-# Kopieren nach config/settings.yaml. Enthält keine Secrets (die stehen in .env).
-# Jeder Wert hier hat eine Begründung in docs/05-safety-legal.md oder docs/06-operations.md.
+# Kopieren nach config/settings.yaml. Keine Geheimnisse hier - die liegen in der Umgebung.
+# Das Suchprofil steht NICHT hier, sondern in der Datenbank unter profile/search
+# (es wird in Phase 0 aus Paulas bisherigen Bewerbungen erarbeitet).
 
-dry_run: true                      # Auslieferungszustand. Nur der Betreiber stellt auf false (M5).
-timezone: Europe/Zurich
-country: CH
-locale: de-CH                      # steuert Schreibweise (ss statt ß) und Datumsformate
+land: AT
+sprache: de-AT          # oesterreichisches Deutsch: Jaenner, Bewerbungsunterlagen, "ss" wird verwendet
+zeitzone: Europe/Vienna
 
-limits:
-  sends_per_day: 5
-  applications_per_week: 12
-  spontaneous_per_week: 5
-  proposals_per_day: 3             # Karten an Paula pro Tag (Einladungen/Antworten zählen nicht)
-  min_minutes_between_sends: 20
-  send_window:                     # Ortszeit
-    days: [mon, tue, wed, thu, fri]
-    start: "08:00"
-    end: "18:00"
-  proposal_window:                 # wann Paula Karten bekommt
-    days: [mon, tue, wed, thu, fri, sat]
-    start: "08:00"
-    end: "20:00"
-  companies_research_per_night: 10
-  llm_budget_usd_per_day: 3.0
-  attachment_mb_total: 8
+mailbox:
+  monate_zurueck: 36
+  suchbegriffe: >
+    bewerbung OR bewerbungsunterlagen OR "ihre bewerbung" OR absage OR
+    "vorstellungsgespräch" OR "bewerbungsgespräch" OR einladung OR lebenslauf OR
+    motivationsschreiben OR application OR "your application" OR interview OR
+    stelle OR position
+  max_zeichen_pro_mail: 8000
 
-thresholds:
-  portal_score: 65                 # T5: ab hier wird ein Entwurf erzeugt
-  spontaneous_score: 75            # T5b: bewusst höher
-  classification_confidence: 0.7   # T1/T9: darunter needs_human
+schwellwerte:
+  stelle: 55            # bewusst niedrig - Paula ist offen und braucht dringend etwas
+  initiativ: 70
+  urteil_unsicher: 0.7  # darunter wird nachgefragt statt angenommen
 
-dedup:
-  company_cooldown_days: 180
-  ignore_cooldown_for_staffing_agencies: true
+grenzen:
+  karten_pro_tag: 6             # wie viele neue Vorschlaege Paula hoechstens sieht
+  initiativ_pro_woche: 5
+  firmen_recherche_pro_nacht: 10
+  sperrfrist_tage: 180          # dieselbe Firma fruehestens danach wieder
+  sperrfrist_gilt_nicht_fuer_vermittler: true
+  keine_antwort_nach_tagen: 42  # dann Nachfass-Vorschlag
+  automatisch_schliessen_nach_tagen: 90
+  aenderungsrunden: 3
 
-replies:
-  no_reply_days: 42                # danach Status no_reply + Nachfass-Vorschlag
-  auto_close_days: 90
-  approval_expiry_days: 7
-  approval_reminder_days: 3
-  max_revision_rounds: 3
-
-mail:
-  provider: gmail                  # gmail | imap
-  history_months: 24
-  label_prefix: "Paula-Agent"
-  initial_scan_query: >
-    (bewerbung OR application OR candidature OR candidatura OR absage OR
-     vorstellungsgespräch OR interview OR "ihre unterlagen" OR "your application" OR
-     "votre candidature" OR stelle OR position OR job)
-
-sources:
+quellen:
   adzuna:
-    enabled: true
-    country: ch
-    max_days_old: 2
-    results_per_page: 50
-    max_pages: 2
+    aktiv: true
+    land: at
+    max_tage_alt: 2
+    treffer_pro_seite: 50
+    max_seiten: 2
   mailalert:
-    enabled: true
-    senders:                       # Absender der Job-Alert-Mails → eigener Parser je Eintrag
-      - { name: jobs.ch,     match: "@jobs.ch" }
-      - { name: jobroom,     match: "@job-room.ch" }
-  careerpage:
-    enabled: false                 # ab M7
-  jobspy:
-    enabled: false                 # nur nach Entscheidung Q8
-  manual:
-    enabled: true
+    aktiv: true
+    absender:
+      - { name: karriere.at,  match: "@karriere.at" }
+      - { name: willhaben,    match: "@willhaben.at" }
+      - { name: stepstone,    match: "@stepstone.at" }
+      - { name: ams,          match: "@ams.at" }
+  karriereseiten:
+    aktiv: false        # ab M7
+  eingereicht:
+    aktiv: true
 
-companies:
-  discovery_sources: [seed_csv, inbox, jobs]   # + zefix / opendata ab M7
-  research_max_age_days: 180
-
-llm:
-  default_model: claude-opus-5
-  triage_model: claude-haiku-4-5
-  effort:
-    classify: low
-    score: medium
-    research: medium
-    draft: high
-    factcheck: medium
-  research_tool_max_uses: 6
-
-telegram:
-  language: de
-  form_of_address: du              # du | sie
-  bot_display_name: "Paula Bewerbungshilfe"
-  admin_may_approve: false         # nur für Tests auf true
-
-attachments:                       # Dateien in data/documents/
-  - Lebenslauf.pdf
-  - Zeugnisse.pdf
+texte:
+  laenge_stelle: [150, 260]     # Woerter
+  laenge_initiativ: [120, 200]
+  verbotene_floskeln:
+    - leidenschaftlich
+    - hochmotiviert
+    - "perfekt geeignet"
+    - "Ihr renommiertes Unternehmen"
+    - "ich bin überzeugt, dass"
+  max_aehnlichkeit_zu_frueheren: 0.7

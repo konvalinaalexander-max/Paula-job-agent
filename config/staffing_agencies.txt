@@ -1,16 +1,33 @@
-# Personalvermittler (normalisierte Namen). Sperrfrist gilt für diese nicht (docs/04-integrations.md 4.4.1)
-adecco
-randstad
+# Personalvermittler und Zeitarbeitsfirmen in Österreich (normalisierte Namen).
+# Fuer diese gilt die 180-Tage-Sperrfrist NICHT - man bewirbt sich bei derselben
+# Agentur auf verschiedene Stellen. Die Karte weist trotzdem darauf hin.
+isg
+iventa
+epunkt
+hill international
+hill woltron
+trenkwalder
 manpower
-michael page
+manpowergroup
+randstad
+adecco
 hays
-robert half
+powerserv
+job tv
+jobs4you
+teampool
+dis ag
 kelly services
-interiman
-jobcloud
-universal job
-joker personal
-das team
-work selection
-yellowshark
-art of work
+apeiron
+schulmeister
+catro
+neumann
+mercuri urval
+stepstone personalberatung
+karriere personalberatung
+personalhaus
+job impulse
+arwa
+express personal
+menschen im vertrieb
+talentor

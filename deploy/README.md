@@ -1,9 +1,10 @@
-# Deploy
+# Einrichtung und Betrieb
 
-Die ausführende KI schreibt in M0:
-- `SETUP.md` – Runbook für den Betreiber (Hetzner, Google Cloud Console, BotFather, Adzuna, .env, erste Läufe) – Schritt für Schritt, für Nicht-Techniker.
-- `RUNBOOK.md` (M8) – was tun bei Gmail 401, Telegram down, Budget, Quelle deaktiviert, Paula /stop, Neuaufsetzen.
-- `RESTORE.md` (M8) – Backup zurückspielen, getestet.
-- `install-systemd.sh`, `deploy.sh`.
+Kein Server, kein Docker, keine Dienste. Was hier entsteht:
 
-Die Unit-Dateien hier sind Vorlagen (Pfade: /opt/paula, Nutzer paula).
+| Datei | Wann | Inhalt |
+|---|---|---|
+| `SETUP.md` | M0 | Anleitung für Alexander, Klick für Klick: Google-Projekt, Gmail-Berechtigung, Paulas Anmeldung, Adzuna-Registrierung, Geheimnisse hinterlegen, Dashboard veröffentlichen |
+| `ROUTINES.md` | M6 | Welche Routinen es gibt, wann sie laufen, wie man sie anlegt, pausiert und wieder einschaltet |
+| `RUNBOOK.md` | M6 | Was tun, wenn: Anmeldung abgelaufen, Quelle ausgefallen, keine Karten mehr, Paula reagiert nicht |
+| `RESTORE.md` | M6 | Sicherung zurückspielen – einmal geübt und protokolliert |

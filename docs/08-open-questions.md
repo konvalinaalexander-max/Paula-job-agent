@@ -1,92 +1,75 @@
-# 08 – Offene Fragen an den Auftraggeber
+# 08 – Offene Fragen
 
-Mit **[BLOCKIEREND]** markierte Fragen müssen beantwortet sein, bevor die genannte Etappe beginnt. Alle anderen haben eine Default-Annahme, mit der die ausführende KI weiterarbeitet, bis eine Antwort kommt. Antworten bitte direkt hier eintragen (Abschnitt "Antwort").
+> **Version 2.** Beantwortete Fragen sind als solche gekennzeichnet. Neue Fragen ab Q17.
+
+## Beantwortet (13.09.2026)
+
+### Q1 – Land und Region ✅
+**Österreich.** Der ganze Plan ist darauf umgestellt: Adzuna Land `at`, karriere.at / willhaben / StepStone AT / AMS als Quellen, österreichische Rechtsformen bei der Firmenerkennung (GmbH, Ges.m.b.H., OG, KG, e.U., AG), österreichisches Deutsch in den Texten (Jänner, Bewerbungsunterlagen, „ß" wird verwendet).
+*Offen bleibt:* welcher Ort und welcher Umkreis. Wird in Phase 0 aus ihren bisherigen Bewerbungen abgeleitet und von ihr bestätigt.
+
+### Q2 – Beruf und Zielrollen ✅ *(durch Verfahren ersetzt)*
+Wird **nicht** abgefragt, sondern aus der Mailbox erarbeitet: aus ihren dutzenden Lebenslauf-Fassungen, den Jobtiteln, auf die sie sich beworben hat, und ihren Motivationsschreiben. Ergebnis legt sie im Dashboard zur Bestätigung vor (M2). Zusatzinformation des Auftraggebers: *sie braucht dringend einen Job und ist offen für vieles* – deshalb Schwellwert bei 55 statt 65 und ein bewusst breiteres Suchprofil.
+
+### Q3 – Mailanbieter ✅
+**Gmail.** Zugriff über die offizielle Schnittstelle, ausschließlich lesend.
+
+### Q4 – Einwilligung ✅
+**Paula weiß davon.** Schriftliche Festhaltung in M0, damit sie den Umfang genau kennt.
+
+### Q8 – Auslesen von Portalen gegen deren Bedingungen
+**Vorläufig: Nein.** Wird auch nicht gebraucht – Job-Suchaufträge per Mail decken karriere.at, willhaben, StepStone und AMS sauber ab. Frage bleibt offen, falls sich das als unzureichend erweist.
 
 ---
 
-### Q1 [BLOCKIEREND für M0] – Land und Region
-In welchem Land / welcher Region sucht Paula? (Entscheidet Jobquellen, Firmenregister, Sprache, Rechtsformen, Schreibweise.)
-**Vermutung aus dem Sprachgebrauch ("Spontanbewerbung", "gutheissen"):** Schweiz, Deutschschweiz.
-**Default:** CH, `locale: de-CH`, Radius 40 km um einen noch zu nennenden Ort.
+## Neu und offen
+
+### Q17 [BLOCKIEREND für M3] – Wie kommt Paula ans Dashboard?
+Eine veröffentlichte Seite mit Datenbank ist organisationsintern: Wer sie öffnet, muss bei claude.ai angemeldet und Mitglied deiner Organisation sein. Paula hat laut ursprünglicher Angabe keinen Claude-Zugang.
+
+Drei Wege:
+1. **Paula bekommt einen Zugang in deiner Organisation.** Sie loggt sich einmal ein, setzt ein Lesezeichen – für sie ist das einfach eine Website mit Login. Ob das ein bezahlter Platz ist, hängt von deinem Abo ab. *Einfachster Weg, wenn es geht.*
+2. **Eigene Website.** Kleine Seite bei einem Hoster, gemietete Datenbank, ein Passwort. Für Paula nur eine Adresse ohne Anmeldung bei irgendetwas. Kostet ~0–10 €/Monat und ungefähr eine Woche Mehrarbeit. Der restliche Plan bleibt unverändert.
+3. **Übergangsweise** leitest du den Inhalt täglich an sie weiter. Funktioniert ab sofort, ist aber Handarbeit.
+
 **Antwort:** _
 
-### Q2 [BLOCKIEREND für M0] – Beruf, Zielrollen, Rahmen
-Was macht Paula beruflich, welche Rollen sucht sie, welches Pensum, welche Branchen, was auf keinen Fall? Gibt es ihren Lebenslauf als PDF?
-**Default:** keiner möglich – ohne das kann `profile.yaml` nicht gefüllt werden.
+### Q3b – Wie viele Mailadressen?
+Hat Paula sich immer über dieselbe Adresse beworben, oder über mehrere (alte Adresse, Portal-Adresse)? Jede weitere Adresse verdoppelt den Aufwand in Phase 0 nicht, muss aber bekannt sein.
 **Antwort:** _
 
-### Q3 [BLOCKIEREND für M1] – Mailanbieter
-Ist Paulas Bewerbungs-Mailadresse bei Gmail/Google? Wenn nicht: welcher Anbieter (Bluewin, GMX, Outlook, eigene Domain)? Nutzt sie **eine** Adresse für Bewerbungen oder mehrere?
-**Default:** Gmail. Sonst IMAP-Fallback (4.2), was M1 um ~2 Tage verlängert.
+### Q18 – Wie weit zurück?
+Vorschlag: **36 Monate.** Weiter zurück bringt vor allem veraltete Lebenslauf-Fassungen, die den Faktenblock eher verwässern. Weniger als 24 Monate riskiert, Bewerbungen zu übersehen, deren Sperrfrist noch läuft.
 **Antwort:** _
 
-### Q4 [BLOCKIEREND für M1] – Einwilligung
-Ist Paula grundsätzlich einverstanden, dass ein System ihre Mailbox liest und in ihrem Namen (nach Freigabe) sendet? Hat sie Telegram oder wäre sie bereit, es zu installieren?
-**Default:** keiner. Ohne Ja gibt es kein Projekt.
+### Q19 – Was passiert mit den alten Lebenslauf-Fassungen?
+Sie werden zur Dateiablage des Dashboards hinzugefügt, damit Paula sie herunterladen kann. Soll die **neueste** unverändert mitgeschickt werden, oder soll pro Bewerbung eine angepasste Fassung entstehen?
+*Empfehlung: zunächst die neueste, unverändert.* Ein automatisch umgebauter Lebenslauf ist heikel (Formatierung, Wahrheit, Aufwand) und bringt weniger als ein gutes Anschreiben. Später nachrüstbar.
 **Antwort:** _
 
-### Q5 – Budget
-Was darf das monatlich kosten? Erwartung: ~5 € VPS + 20–45 $ LLM.
-**Default:** `llm_budget_usd_per_day: 3`.
+### Q20 – Initiativbewerbungen: wie viele?
+Im Plan: nachts zehn Firmen recherchieren, daraus höchstens fünf Vorschläge pro Woche. Angesichts ihrer Lage vielleicht mehr?
+*Empfehlung: mit diesen Zahlen starten und nach zwei Wochen nachjustieren* – das Nadelöhr ist nicht die Technik, sondern wie viele gute Texte pro Woche entstehen und wie viele sie tatsächlich abschickt.
 **Antwort:** _
 
-### Q6 – Hosting
-VPS (Hetzner o. ä., Betreiber bestellt) oder vorhandene Hardware (Raspberry Pi, Heimserver)? Wer bezahlt?
-**Default:** Hetzner CX22, Standort Nürnberg.
+### Q21 – Soll Paula Benachrichtigungen bekommen?
+Das Dashboard ist eine Seite, die sie aktiv öffnen muss. Soll sie zusätzlich eine Nachricht bekommen, wenn etwas Wichtiges da ist – vor allem bei einer Einladung? Möglich wäre eine schlichte Mail an sie („2 neue Bewerbungen liegen bereit"). Das wäre die einzige Stelle, an der das System doch etwas verschickt – an sie selbst, nicht an Dritte, und über einen getrennten Weg, nicht über ihr Konto.
 **Antwort:** _
 
-### Q7 – Welche Portale nutzt Paula heute?
-Wo hat sie Konten / Suchagenten (jobs.ch, jobup.ch, job-room.ch, Indeed, LinkedIn, karriere.at, StepStone, …)? Dort richten wir E-Mail-Suchagenten ein (4.4.6).
-**Default:** jobs.ch + job-room.ch Suchagenten einrichten; Adzuna CH als API-Quelle.
+### Q12 – Wohin mit den Sicherungen?
+Wöchentliche Ausfuhr der Datenbank als JSON. Auf deinen Rechner? In eine Cloud-Ablage? Gar nicht?
+*Vorgabe bis auf Weiteres:* Ausfuhr wird erzeugt, du legst sie manuell ab.
 **Antwort:** _
 
-### Q8 – Inoffizielles Scraping (Indeed/Google Jobs via JobSpy)
-Diese Quellen verstoßen gegen AGB der Portale; Praxisrisiko für Privatnutzer gering, aber vorhanden. Sollen sie genutzt werden?
-**Default:** Nein. Nur offizielle APIs, E-Mail-Alerts, Karriereseiten.
-**Antwort:** _
-
-### Q9 – Wer ist Admin?
-Alexander allein? Zweite Person als Backup-Admin?
-**Default:** nur Alexander.
-**Antwort:** _
-
-### Q10 – Anrede im Bot
-Du oder Sie? Sprache Deutsch? Name des Bots?
-**Default:** Du, Deutsch, "Paula Bewerbungshilfe".
-**Antwort:** _
-
-### Q11 – Sperrfrist und Nachfassen
-Nach wie vielen Monaten darf dieselbe Firma wieder angeschrieben werden? Soll bei Funkstille nachgefasst werden, und nach wie vielen Wochen?
-**Default:** 6 Monate; Nachfass-Vorschlag nach 4 Wochen (nur Vorschlag, Paula entscheidet).
-**Antwort:** _
-
-### Q12 – Off-Site-Backup
-Wohin verschlüsselte Wochen-Backups? (Hetzner Storage Box ~4 €/Monat, eigener Rechner per rclone, gar nicht.)
-**Default:** nur lokal auf dem VPS, 14 Tage. Off-Site in M8 nachrüsten.
-**Antwort:** _
-
-### Q13 – Sprachen der Bewerbungen
-Nur Deutsch? Auch Französisch/Englisch, wenn das Inserat so ist? Wie gut spricht Paula diese Sprachen (steht im Faktenblock, aber die Regel "Bewerbung in Inseratssprache" braucht ein Minimum-Niveau)?
-**Default:** Deutsch immer; FR/EN nur, wenn Faktenblock ≥ B2 ausweist; sonst Inserat trotzdem vorschlagen mit Hinweis "auf Französisch – willst du das?".
-**Antwort:** _
-
-### Q14 – Anhänge
-Welche Dokumente gehen mit? (CV, Zeugnisse, Diplome, Foto?) Als ein PDF oder mehrere? Maximalgröße?
-**Default:** `Lebenslauf.pdf` + `Zeugnisse.pdf`, gesamt ≤ 8 MB.
-**Antwort:** _
-
-### Q15 – Paulas Zeitfenster
-Wann will Paula Vorschläge bekommen (nicht nachts, nicht am Wochenende)? Wie viele pro Tag maximal?
-**Default:** Karten nur 08:00–20:00 Mo–Sa; max 3/Tag.
-**Antwort:** _
-
-### Q16 – Umgang mit Personalvermittlern
-Bewerbungen über Adecco/Randstad/Manpower & Co. zulassen?
-**Default:** Ja, mit Kennzeichnung in der Karte.
+### Q22 – Wer ist Ersatz-Betreiber?
+Wenn du zwei Wochen nicht kannst und etwas hängt – gibt es jemanden, der nachsehen kann? Falls nein, sollten die Meldungen so geschrieben sein, dass Paula sie versteht und weiß, an wen sie sich wendet.
 **Antwort:** _
 
 ---
 
-## Vorschläge der ausführenden KI (Feature-Ideen außerhalb des Plans)
+## Vorschläge (nicht bauen ohne Entscheidung)
 
-*(Hier einträgen statt bauen. Der Auftraggeber entscheidet.)*
+- **„Ich war heute bei einem Gespräch"-Knopf** im Dashboard, der eine Notiz an der Bewerbung speichert. Wäre nützlich für den Überblick, ist aber Zusatzaufwand.
+- **Gehaltsangaben auswerten:** Adzuna liefert oft Gehaltsspannen. Eine Zeile „üblicherweise 2.400–2.900 €" auf der Karte könnte ihr bei der Einschätzung helfen.
+- **Zweisprachige Texte:** Wenn ein Inserat auf Englisch ist, den Text auf Englisch erzeugen – aber nur, wenn ihr Faktenblock ein ausreichendes Niveau ausweist.
+- **Erinnerung vor Gesprächsterminen** – braucht aber einen Benachrichtigungsweg (Q21).

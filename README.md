@@ -1,59 +1,72 @@
 # Paula Job Agent
 
-Ein halbautomatisches Bewerbungssystem für eine einzelne Person ("Paula"), das
+Ein Assistenzsystem für **eine** Person auf Stellensuche in Österreich. Es liest ihre Mailbox, lernt daraus, wer sie ist und wie sie schreibt, sucht mehrmals täglich passende Stellen und legt ihr **fertig vorbereitete Bewerbungen** auf ein Dashboard – Text, Empfänger, Lebenslauf.
 
-1. ihre Mailbox liest und die bisherige Bewerbungshistorie rekonstruiert (keine Doppelbewerbungen),
-2. ihren Schreibstil und ihre Fakten (Lebenslauf) lernt,
-3. mehrmals täglich Jobportale und – gezielt – Firmen für Spontanbewerbungen durchsucht,
-4. passende Stellen bewertet, Bewerbungsmails in ihrem Stil entwirft,
-5. **jeden Entwurf per Telegram zur Freigabe vorlegt** (Senden / Ändern / Verwerfen),
-6. nach Freigabe versendet, Antworten liest, einordnet (Absage / Einladung / Rückfrage) und Reaktionen vorschlägt.
+**Abgeschickt wird von Hand.** Das System hat keinen Versandweg; der Gmail-Zugriff ist ausschließlich lesend. Paula kopiert den Text und sendet aus ihrem eigenen Mailprogramm. Dass sie gesendet hat, merkt das System beim nächsten Durchgang selbst.
 
-**Kernprinzip: Nichts verlässt das System ohne Paulas Klick.** Das ist keine Komfortfunktion, sondern die Grundlage dafür, dass das Ganze rechtlich, ethisch und für ihre Mail-Reputation sauber ist.
+## Wie es funktioniert
+
+```
+PHASE 0   Mailbox-Archäologie       Wer ist sie? Wie schreibt sie?
+          (einmalig, nur lesen)      Wo hat sie sich beworben?
+             │
+PHASE 1   Profil bestätigen         Sie sieht es durch und korrigiert
+             │
+PHASE 2   Stellen finden            3× täglich: suchen, bewerten,
+          und vorbereiten            Bewerbung schreiben → Dashboard
+             │
+PHASE 3   Rückkanal                 Gesendet? Antwort da? Status wandert,
+                                     Dankestext liegt bereit
+```
+
+Die Besonderheit ist Phase 0. In Paulas Mailbox liegen bereits dutzende Fassungen ihres Lebenslaufs, alle ihre Motivationsschreiben und die vollständige Geschichte ihrer Bewerbungen. Niemand muss ein Formular ausfüllen – die Antworten sind schon da. Was in vierzehn von fünfzehn Lebenslauf-Fassungen steht, stimmt; wo sich zwei Fassungen widersprechen, wird sie gefragt.
+
+## Was es nicht tut
+
+Keine Mails verschicken · keine Formulare ausfüllen · keine Lebensläufe umschreiben · keine Angaben erfinden · keine Mails lesen, die nichts mit Bewerbungen zu tun haben · nicht „ganz Österreich anschreiben"
 
 ## Status
 
-**Planungsphase.** Dieses Repository enthält den vollständigen Projektplan, die Datenmodelle, Prompt-Spezifikationen und ein Code-Gerüst. Es ist so geschrieben, dass eine ausführende KI (z. B. Claude Code) das Projekt Etappe für Etappe umsetzen kann. Es gibt noch keinen lauffähigen Code.
+**Planung abgeschlossen, Umsetzung noch nicht begonnen.** Dieses Repository enthält den vollständigen Plan, die Datenstrukturen und das Gerüst. Es ist so geschrieben, dass eine ausführende KI es Etappe für Etappe bauen kann.
 
 ## Für die ausführende KI
 
-**Lies zuerst [`CLAUDE.md`](CLAUDE.md).** Dort stehen Arbeitsweise, harte Regeln und die Reihenfolge.
+**Zuerst [`CLAUDE.md`](CLAUDE.md) lesen.**
 
-## Dokumentation
+## Der Plan
 
 | Datei | Inhalt |
 |---|---|
-| [`docs/00-vision.md`](docs/00-vision.md) | Ziel, Nicht-Ziele, Prinzipien, Rollen, Erfolgskriterien |
-| [`docs/01-architecture.md`](docs/01-architecture.md) | Komponenten, Datenfluss, Laufzeitmodell, Modulstruktur, Architekturentscheidungen |
-| [`docs/02-data-model.md`](docs/02-data-model.md) | Datenbankschema, Status-Maschine, Dedup-Regeln |
-| [`docs/03-llm-tasks.md`](docs/03-llm-tasks.md) | Jede KI-Aufgabe einzeln: Input, Output-Schema, Modell, Guardrails, Tests |
-| [`docs/04-integrations.md`](docs/04-integrations.md) | Gmail, Telegram, Jobquellen, Firmen-Discovery, Versand – konkret |
-| [`docs/05-safety-legal.md`](docs/05-safety-legal.md) | Guardrails, Einwilligung, Datenschutz, Faktentreue, Kill-Switch |
-| [`docs/06-operations.md`](docs/06-operations.md) | Deployment, Cron, Logging, Backups, Secrets, Kostenkontrolle |
-| [`docs/07-milestones.md`](docs/07-milestones.md) | Etappen M0–M9 mit Aufgaben, Tests und Definition of Done |
-| [`docs/08-open-questions.md`](docs/08-open-questions.md) | Offene Fragen an den Auftraggeber, mit Default-Annahmen |
-| [`docs/09-research-notes.md`](docs/09-research-notes.md) | Recherche: bestehende Projekte, APIs, was verworfen wurde |
-| [`docs/10-telegram-flows.md`](docs/10-telegram-flows.md) | Der komplette Dialog mit Paula: Befehle, Nachrichten, Buttons |
-| [`docs/11-testing.md`](docs/11-testing.md) | Teststrategie: Fixtures, Golden-Tests, Dry-Run, Staging |
+| [`docs/00-vision.md`](docs/00-vision.md) | Ziel, Nicht-Ziele, Prinzipien, Erfolgskriterien |
+| [`docs/01-architecture.md`](docs/01-architecture.md) | Wie das Ganze läuft – ohne eigenen Server |
+| [`docs/02-data-model.md`](docs/02-data-model.md) | Datenstruktur, Statuswege, Doppelbewerbungs-Schutz |
+| [`docs/03-llm-tasks.md`](docs/03-llm-tasks.md) | Die zwölf Urteile: Regeln, Ergebnisform, Prüffälle |
+| [`docs/04-integrations.md`](docs/04-integrations.md) | Gmail, Stellenquellen Österreich, Firmendaten, Dashboard |
+| [`docs/05-safety-legal.md`](docs/05-safety-legal.md) | Einwilligung, Datensparsamkeit, Wahrheit in den Texten |
+| [`docs/06-operations.md`](docs/06-operations.md) | Betrieb, Automatik, Kosten, was bei Störungen zu tun ist |
+| [`docs/07-milestones.md`](docs/07-milestones.md) | Etappen M0–M7 mit Abnahmekriterien |
+| [`docs/08-open-questions.md`](docs/08-open-questions.md) | Beantwortet und offen |
+| [`docs/09-research-notes.md`](docs/09-research-notes.md) | Was recherchiert wurde, was verworfen |
+| [`docs/10-dashboard.md`](docs/10-dashboard.md) | Die Oberfläche, Block für Block |
+| [`docs/11-testing.md`](docs/11-testing.md) | Wie geprüft wird |
 
-## Struktur
+## Aufbau
 
 ```
-.
-├── CLAUDE.md               Anweisungen für die ausführende KI
-├── docs/                   Der Plan (siehe Tabelle)
-├── config/                 Beispiel-Konfiguration (Profil, Settings)
-├── prompts/                Prompt-Templates als Dateien (Entwürfe, zu verfeinern)
-├── db/                     schema.sql + Migrationen
-├── src/paula/              Python-Package (Gerüst mit Docstrings, noch ohne Logik)
-├── tests/                  Tests + Fixtures
-├── deploy/                 systemd-Units, Deploy-Skript
-├── data/                   Laufzeitdaten (DB, Dokumente, Profile) — nicht in Git
-└── .env.example            Welche Secrets gebraucht werden
+CLAUDE.md      Anweisungen für die ausführende KI
+docs/          Der Plan
+scripts/       Helfer: Daten holen und schreiben (keine Urteile)
+runbooks/      Arbeitsanweisungen für die automatischen Läufe
+dashboard/     Die Seite, die Paula sieht
+config/        Listen und Einstellungen
+tests/         Tests und erfundene Beispieldaten
+deploy/        Einrichtungsanleitungen
 ```
+
+**Keine personenbezogenen Daten in diesem Repository.** Mails, Lebensläufe, Firmen und Bewerbungen liegen ausschließlich in der Dashboard-Datenbank.
 
 ## Rollen
 
-- **Auftraggeber / Betreiber:** Alexander – richtet ein, betreibt, hat Admin-Zugang.
-- **Nutzerin:** Paula – sucht den Job, gibt frei, kommuniziert nur über Telegram.
-- **Ausführende KI:** setzt den Plan um, fragt bei Unklarheit den Auftraggeber.
+- **Alexander** – richtet ein, betreibt, entscheidet
+- **Paula** – sucht die Stelle, sieht nur das Dashboard, sendet selbst
+- **Claude** – baut das System und macht später die täglichen Läufe
